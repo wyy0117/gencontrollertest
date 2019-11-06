@@ -8,7 +8,16 @@ A：对于单元测试来说，速度，性能等都是无关紧要的，最终�
 ### 项目简介
 该项目是使用groovy开发的，根据编写的controller类生成对应的测试代码，生成的代码基于第三方测试框架[rest-assured](https://github.com/rest-assured/rest-assured)，基本可以满足所有的GET,POST,DELETE,PUT请求，通过代码发送rest请求调用后台接口，模拟真实调用接口场景。
 ### 使用方法
-详见单元测试，为了反射能读取到方法的参数的名字，生成代码时需要添加编译参数‘-parameters’，代码生成后该参数即可删除，
+1. 为了反射能读取到方法的参数的名字,生成代码时需要添加编译参数‘-parameters’。
+2. 代码生成后该参数即可删除如果重复生成同一个controller的代码，文件会以后缀添加递增数字的方式生成而不会覆盖已生产的文件.
+3. 生成的测试代码的类名为原controller的类名+“Test”.
+```
+@Test
+void gen() {
+    new CodeGenerator(new GeneratorConfig(aClass: RestApiController.class, packageName: 'com.wyy.test.gen', context: "gen",authType: AuthType.JWT)).gen()
+}
+```  
+详见单元测试
 ##### maven
 ```
 <plugin>

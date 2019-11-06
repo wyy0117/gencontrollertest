@@ -20,8 +20,15 @@ class CodeFileWriter {
         if (!folder.exists()) {
             folder.mkdirs()
         }
-        File file = new File(folder, config.aClass.simpleName + "Test.groovy")
-        println "{file.absolutePath} = ${file.absolutePath}"
+
+        String fileName = config.aClass.simpleName + "Test.groovy"
+        folder.listFiles()
+        int size = folder.listFiles({ file, name ->
+            return name.startsWith(fileName)
+        } as FilenameFilter).size()
+        size > 0 && (fileName += size)
+        File file = new File(folder, fileName)
+        println "generated file absolutePath : ${file.absolutePath}"
         file.text = context
     }
 }
