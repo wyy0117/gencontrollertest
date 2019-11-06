@@ -34,8 +34,8 @@ abstract class GlobalAbstractGenerator implements IGlobalVariableGenerator {
         builder.append("private String ${ConfigConstant.CONTEXT} = '${context()}'\n")
 
         if (config.authType != null) {
-            builder.append("private String ${ConfigConstant.USERNAME} = 'username'\n")
-            builder.append("private String ${ConfigConstant.PASSWORD} = 'password'\n")
+            builder.append("private String ${ConfigConstant.USERNAME} = 'username'//todo\n")
+            builder.append("private String ${ConfigConstant.PASSWORD} = 'password'//todo\n")
         }
 
         if (config.authType == AuthType.JWT) {

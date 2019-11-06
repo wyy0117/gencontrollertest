@@ -23,6 +23,10 @@ class MethodReader {
                 ?: method.getAnnotation(DeleteMapping.class)
     }
 
+    /**
+     * 方法名
+     * @return
+     */
     final String methodName() {
         method.name
     }
@@ -33,6 +37,18 @@ class MethodReader {
         url
     }
 
+    /**
+     * 是否添加了接口的注解
+     * @return
+     */
+    final boolean validMethod() {
+        annotation != null
+    }
+
+    /**
+     * 接口的请求方法
+     * @return
+     */
     final String requestMethod() {
         if (annotation instanceof RequestMapping) {
             return ((RequestMapping) annotation).method()[0].toString().toLowerCase()
@@ -45,7 +61,11 @@ class MethodReader {
 
     }
 
-    final Class returnType() {
+    /**
+     * 方法的返回类型
+     * @return
+     */
+    final Class<?> returnType() {
         method.returnType
     }
 }

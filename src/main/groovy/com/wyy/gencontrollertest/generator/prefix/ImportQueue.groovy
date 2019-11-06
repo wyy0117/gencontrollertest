@@ -18,6 +18,6 @@ class ImportQueue {
     }
 
     Set<String> getQueue() {
-        return queue
+        queue
     }
 }

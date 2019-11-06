@@ -61,6 +61,10 @@ abstract class TestAbstractGenerator implements ITestGenerator {
 
     @Override
     StringBuilder gen() {
+
+        if (!methodReader.validMethod()) {
+            new StringBuilder()
+        }
         //测试的入口
         ImportQueue.instance.add(Test.class.name)
         StringBuilder builder = new StringBuilder()

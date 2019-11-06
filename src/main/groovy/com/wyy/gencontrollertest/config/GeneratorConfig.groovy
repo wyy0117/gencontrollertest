@@ -24,7 +24,13 @@ class GeneratorConfig {
      */
     String context = ""
     AuthType authType
+    /**
+     * 是否生产before
+     */
     boolean before = false
+    /**
+     * 是否生产after
+     */
     boolean after = false
 
     String getPackageName() {
@@ -36,6 +42,9 @@ class GeneratorConfig {
     }
 
     String getContext() {
+        if (context.length() == 0) {
+            return context
+        }
         context.startsWith("/") || (context = "/" + context)
         context
     }
