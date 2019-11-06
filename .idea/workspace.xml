@@ -4,16 +4,6 @@
     <list default="true" id="98c6d505-a740-4ed1-a08b-8a80066ddfc3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/config/GeneratorConfig.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/config/GeneratorConfig.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/exception/NoAnnotationException.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/exception/package-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/generator/globlevariable/GlobalAbstractGenerator.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/generator/globlevariable/GlobalAbstractGenerator.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/generator/method/before/BeforeAbstractGenerator.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/generator/method/before/BeforeAbstractGenerator.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/generator/method/test/TestAbstractGenerator.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/generator/method/test/TestAbstractGenerator.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/generator/prefix/ImportQueue.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/generator/prefix/ImportQueue.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/reader/ClassReader.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/reader/ClassReader.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/reader/MethodReader.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/reader/MethodReader.groovy" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -78,15 +68,6 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/CodeGenerator.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="32" column="31" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/reader/ClassReader.groovy">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="240">
@@ -134,11 +115,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="28" selection-start-line="28" selection-end-line="30" selection-end-column="1" />
+            <state relative-caret-position="135">
+              <caret line="9" column="25" lean-forward="true" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -152,13 +133,18 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/config/GeneratorConfig.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
-              <caret line="45" column="26" selection-start-line="45" selection-start-column="26" selection-end-line="45" selection-end-column="26" />
+            <state relative-caret-position="705">
+              <caret line="47" column="60" selection-start-line="47" selection-start-column="60" selection-end-line="47" selection-end-column="60" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -183,7 +169,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/test/groovy/com/wyy/test/gen/RestApiControllerTest.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/generator/method/test/TestAbstractGenerator.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/reader/MethodReader.groovy" />
@@ -193,6 +178,7 @@
         <option value="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/generator/globlevariable/GlobalAbstractGenerator.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/generator/method/before/BeforeAbstractGenerator.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/config/GeneratorConfig.groovy" />
+        <option value="$PROJECT_DIR$/build.gradle" />
       </list>
     </option>
   </component>
@@ -206,10 +192,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1421" />
-    <option name="y" value="36" />
+    <option name="x" value="1919" />
+    <option name="y" value="-1" />
     <option name="width" value="1922" />
-    <option name="height" value="1044" />
+    <option name="height" value="1082" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -341,21 +327,21 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/build.gradle" />
+    <property name="last_opened_file_path" value="$USER_HOME$/cache/temp/test/build.gradle" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -483,7 +469,8 @@
       <option name="presentableId" value="Default" />
       <updated>1573007219468</updated>
       <workItem from="1573007221327" duration="4087000" />
-      <workItem from="1573022958047" duration="599000" />
+      <workItem from="1573022958047" duration="2196000" />
+      <workItem from="1573027941903" duration="1839000" />
     </task>
     <task id="LOCAL-00001" summary="add intellij config">
       <created>1573008525610</created>
@@ -492,7 +479,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573008525610</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="优化">
+      <created>1573025328738</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1573025328738</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -522,12 +516,13 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4686000" />
+    <option name="totallyTimeSpent" value="8122000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1919" y="-1" width="1922" height="1082" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15761448" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15921193" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="JRebel" order="3" side_tool="true" />
@@ -538,7 +533,7 @@
       <window_info id="Image Layers" order="8" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.28029504" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.31085354" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -549,7 +544,7 @@
       <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="12" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="13" visible="true" weight="0.32982087" />
+      <window_info anchor="bottom" id="Version Control" order="13" weight="0.32982087" />
       <window_info anchor="bottom" id="Alibaba Cloud View" order="14" />
       <window_info anchor="bottom" id="JRebel Executor" order="15" />
       <window_info anchor="bottom" id="JRebel Console" order="16" side_tool="true" />
@@ -574,7 +569,8 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="add intellij config" />
-    <option name="LAST_COMMIT_MESSAGE" value="add intellij config" />
+    <MESSAGE value="优化" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/.attach_pid5574" />
@@ -671,19 +667,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" selection-start-line="28" selection-end-line="30" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/generator/method/before/BeforeAbstractGenerator.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
           <caret line="33" column="51" selection-start-line="33" selection-start-column="51" selection-end-line="33" selection-end-column="51" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/config/GeneratorConfig.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="705">
+          <caret line="47" column="60" selection-start-line="47" selection-start-column="60" selection-end-line="47" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/generator/prefix/ImportQueue.groovy">
       <provider selected="true" editor-type-id="text-editor">
@@ -692,10 +691,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/wyy/gencontrollertest/config/GeneratorConfig.groovy">
+    <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="45" column="26" selection-start-line="45" selection-start-column="26" selection-end-line="45" selection-end-column="26" />
+        <state relative-caret-position="135">
+          <caret line="9" column="25" lean-forward="true" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
         </state>
       </provider>
     </entry>

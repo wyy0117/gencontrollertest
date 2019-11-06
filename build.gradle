@@ -15,7 +15,9 @@ repositories {
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.5.8'
+    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.8', ext: 'pom'
+
     // https://mvnrepository.com/artifact/io.rest-assured/spring-mock-mvc
     compile group: 'io.rest-assured', name: 'spring-mock-mvc', version: '4.1.2'
 
