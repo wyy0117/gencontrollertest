@@ -6,5 +6,9 @@ A: springboot项目的测试，每跑一个单元测试，基本是需要项目�
 Q：为什么使用groovy而不是java？  
 A：对于单元测试来说，速度，性能等都是无关紧要的，最终目的是为了把接口测试一遍，参数怎么方便怎么拼，代码行数怎么少就怎么写。java这种强类型语言不太适合，groovy这种半强类型就非常灵活，需要强类型就可以强类型，不需要就可以像js那样灵活，而且跟java又非常像，学习成本相对较低。  
 #### 项目简介
-该项目是使用groovy开发的，根据编写的controller类生成对应的测试代码，生成的代码基于第三方测试框架[rest-assured](https://github.com/rest-assured/rest-assured)，基本可以满足所有的GET,POST,DELETE,PUT请求，通过代码发送rest请求调用后台接口，模拟真实调用接口场景。  
+该项目是使用groovy开发的，根据编写的controller类生成对应的测试代码，生成的代码基于第三方测试框架[rest-assured](https://github.com/rest-assured/rest-assured)，基本可以满足所有的GET,POST,DELETE,PUT请求，通过代码发送rest请求调用后台接口，模拟真实调用接口场景。
+#### 使用方法
+详见单元测试，为了反射能读取到方法的参数的名字，生产代码时需要添加编译参数‘-parameters’，代码生成后即可删除，
+#### 遗留问题
+1. 代码格式化--->因为现在的编辑器都有格式化代码的功能，所以生成的代码没有格式化问题也不大。  
 

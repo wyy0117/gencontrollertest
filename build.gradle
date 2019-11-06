@@ -29,6 +29,3 @@ dependencies {
 compileTestJava {
     options.compilerArgs << '-parameters'
 }
-compileTestGroovy {
-    options.compilerArgs << '-parameters'
-}

@@ -19,7 +19,7 @@ class CodeGenerator {
 
     private GeneratorConfig config
 
-    CodeGenerator(Class aClass) {
+    CodeGenerator(Class<?> aClass) {
         config = new GeneratorConfig(aClass: aClass)
     }
 
@@ -32,8 +32,8 @@ class CodeGenerator {
 
         ClassReader classReader = new ClassReader(config.aClass)
         List<IMethodGenerator> methodGeneratorList = []
-        methodGeneratorList.add(new BeforeGenerator(config))
-        methodGeneratorList.add(new AfterGenerator(config))
+        config.before && methodGeneratorList.add(new BeforeGenerator(config))
+        config.after && methodGeneratorList.add(new AfterGenerator(config))
 
         methodGeneratorList.addAll(classReader.methods().collect({ new TestGenerator(it, config) }))
 

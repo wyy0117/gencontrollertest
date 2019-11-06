@@ -4,6 +4,7 @@ import com.wyy.gencontrollertest.config.AuthType
 import com.wyy.gencontrollertest.config.ConfigConstant
 import com.wyy.gencontrollertest.config.GeneratorConfig
 import com.wyy.gencontrollertest.generator.prefix.ImportQueue
+import io.restassured.http.ContentType
 import org.junit.Before
 
 /**
@@ -39,6 +40,7 @@ abstract class BeforeAbstractGenerator implements IBeforeGenerator {
             println "++++++you are using jwt auth,please update username,password and login url in the before method++++++"
             builder.append("${ConfigConstant.JWT_TOKEN} = given()\n")
             builder.append(".body([username: ${ConfigConstant.USERNAME}, password: ${ConfigConstant.PASSWORD}])//todo\n")
+            ImportQueue.instance.add(ContentType.class.name())
             builder.append(".contentType(ContentType.JSON)\n")
             builder.append(".post('/login')//todo \n")
             builder.append(".then()\n")

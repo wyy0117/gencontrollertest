@@ -10,6 +10,9 @@ class GeneratorConfig {
      * 生成的代码的包路径，决定了生成代码的路径信息，默认使用controller的包路径
      */
     String packageName
+    /**
+     * 要生产测试代码的controller类
+     */
     Class<?> aClass
     /**
      * 作者信息

@@ -150,14 +150,14 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         ImportQueue.instance.add(RequestSpecification.class.name)
         builder.append("RequestSpecification ${REQUEST} = given()\n")
         if (config.authType == AuthType.JWT) {
-            builder.append(".header(${ConfigConstant.AUTHORIZATION}, ${ConfigConstant.JWT_TOKEN})")
+            builder.append(".header('${ConfigConstant.AUTHORIZATION}', ${ConfigConstant.JWT_TOKEN})\n")
         } else if (config.authType == AuthType.BASIC) {
-            builder.append(".auth().preemptive().basic(\"${ConfigConstant.USERNAME}\", \"${ConfigConstant.PASSWORD}\")")
+            builder.append(".auth().preemptive().basic(\"${ConfigConstant.USERNAME}\", \"${ConfigConstant.PASSWORD}\")\n")
         }
         if (haveFile) {
-            builder.append(".multiPart(${fileName},${fileName})\n")
+            builder.append(".multiPart('${fileName}',${fileName})\n")
         } else if (haveFiles) {
-            builder.append(".multiPart(${fileName},${fileName}[0])\n")
+            builder.append(".multiPart('${fileName}',${fileName}[0])\n")
         }
         if (haveBody) {
             builder.append(".body(${bodyName})\n")
