@@ -6,6 +6,7 @@ import com.wyy.gencontrollertest.config.GeneratorConfig
 import com.wyy.gencontrollertest.generator.prefix.ImportQueue
 import com.wyy.gencontrollertest.reader.MethodReader
 import com.wyy.gencontrollertest.reader.ParameterReader
+import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import org.junit.Test
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -104,7 +105,7 @@ abstract class TestAbstractGenerator implements ITestGenerator {
             } else if (annotation instanceof RequestBody) {
                 haveBody = true
                 bodyName = parameterReader.key()
-                requestBody(declareVariableBuilder, invokeBuilder, parametersBuilder, pathParametersBuilder, parameterReader.type(), parameterReader.key())
+                requestBody(declareVariableBuilder, invokeBuilder, parametersBuilder, parameterReader.type(), parameterReader.key())
             } else if (annotation instanceof ModelAttribute) {
                 formName = parameterReader.key()
                 modelAttribute(declareVariableBuilder, invokeBuilder, parametersBuilder, parameterReader.key())
@@ -164,6 +165,8 @@ abstract class TestAbstractGenerator implements ITestGenerator {
             builder.append(".multiPart('${fileName}',${fileName}[0])\n")
         }
         if (haveBody) {
+            ImportQueue.instance.add(ContentType.class.name)
+            builder.append('.contentType(ContentType.JSON)\n')
             builder.append(".body(${bodyName})\n")
         }
 
@@ -204,7 +207,7 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         declareMapBuilder.append("${name}:new Object(),\n")
     }
 
-    protected void requestBody(StringBuilder declareVariableBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, StringBuilder pathParametersBuilder, Class aClass, String name) {
+    protected void requestBody(StringBuilder declareVariableBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, Class aClass, String name) {
         ImportQueue.instance.add(aClass.name)
         if (aClass.isInterface()) {
             declareVariableBuilder.append("${aClass.simpleName} ${name} = new Object()\n")
@@ -213,7 +216,6 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         }
         invokeBuilder.append("$name ,")
         parametersBuilder.append("${aClass.simpleName} ${name},")
-        pathParametersBuilder.append("${name}")
     }
 
     protected void modelAttribute(StringBuilder declareVariableBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, String name) {
