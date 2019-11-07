@@ -26,27 +26,27 @@ A：对于单元测试来说，速度，性能等都是无关紧要的，最终�
     </dependency>
     ```    
 1. 为了反射能读取到方法的参数的名字,生成代码时需要添加编译参数‘-parameters’。
-##### maven
-```
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-compiler-plugin</artifactId>
-    <version>3.3</version>
-    <configuration>
-        <source>1.8</source>
-        <target>1.8</target>
-        <compilerArgs>
-            <arg>-parameters</arg>
-        </compilerArgs>
-    </configuration>
-</plugin>
-```
-##### gradle
-```
-compileTestJava {
-    options.compilerArgs << '-parameters'
-}
-```
+    ##### maven
+    ```
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+            <compilerArgs>
+                <arg>-parameters</arg>
+            </compilerArgs>
+        </configuration>
+    </plugin>
+    ```
+    ##### gradle
+    ```
+    compileTestJava {
+        options.compilerArgs << '-parameters'
+    }
+    ```
 2. 代码生成后该参数即可删除如果重复生成同一个controller的代码，文件会以后缀添加递增数字的方式生成而不会覆盖已生产的文件.
 3. 生成的测试代码的类名为原controller的类名+“Test”.
 ```
