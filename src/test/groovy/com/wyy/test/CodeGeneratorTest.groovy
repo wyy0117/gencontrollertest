@@ -15,7 +15,7 @@ class CodeGeneratorTest {
     @Test
     void gen() {
 
-        new CodeGenerator(new GeneratorConfig(aClass: RestApiController.class, packageName: 'com.wyy.test.gen', context: "gen",authType: AuthType.JWT)).gen()
+        new CodeGenerator(new GeneratorConfig(aClass: RestApiController.class, packageName: 'com.wyy.test.gen', context: "gen", authType: AuthType.JWT, before: true)).gen()
     }
 
 }

@@ -25,8 +25,8 @@ import java.lang.reflect.Parameter
 abstract class TestAbstractGenerator implements ITestGenerator {
 
     private final String QUERY_MAP = 'queryMap'
-    private final String FORM_MAP = 'formMap'
     private final String REQUEST = "request"
+    private final String RESULT = 'result'
 
     private Method method
     private MethodReader methodReader
@@ -76,7 +76,7 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         StringBuilder declareVariableBuilder = new StringBuilder()//声明变量
 
         StringBuilder queryParameterBuilder = new StringBuilder("Map $QUERY_MAP = [\n")
-        StringBuilder formParameterBuilder = new StringBuilder("Map $FORM_MAP = [\n")
+        StringBuilder formParameterBuilder = new StringBuilder("")
 
         StringBuilder invokeBuilder = new StringBuilder()//调用方法
         StringBuilder parametersBuilder = new StringBuilder()//方法定义参数
@@ -110,19 +110,19 @@ abstract class TestAbstractGenerator implements ITestGenerator {
             } else if (annotation instanceof ModelAttribute) {
                 haveFormParameter = true
                 formName = parameterReader.key()
-                modelAttribute(formParameterBuilder, parameterReader.key())
+                modelAttribute(formParameterBuilder, invokeBuilder, parametersBuilder, parameterReader.key())
             } else if (parameterReader.type().name == MultipartFile[].class.name) {
                 haveFiles = true
                 ImportQueue.instance.add(File.class.getName())
                 fileName = parameterReader.key()
-                declareVariableBuilder.append("File[] ${parameterReader.key()} = []")
+                declareVariableBuilder.append("File[] ${parameterReader.key()} = []\n")
                 invokeBuilder.append("${parameterReader.key()},")
                 parametersBuilder.append("File[] ${parameterReader.key()},")
             } else if (parameterReader.type().name == MultipartFile.class.name) {
                 haveFile = true
                 ImportQueue.instance.add(File.class.name)
                 fileName = parameterReader.key()
-                declareVariableBuilder.append("File ${parameterReader.key()} = new File()")
+                declareVariableBuilder.append("File ${parameterReader.key()} = new File('')\n")
                 invokeBuilder.append("${parameterReader.key()},")
                 parametersBuilder.append("File ${parameterReader.key()},")
             } else {
@@ -133,11 +133,6 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         if (haveQueryParameter) {
             invokeBuilder.append("${QUERY_MAP},")
             parametersBuilder.append("${QUERY_MAP},")
-        }
-
-        if (haveFormParameter) {
-            invokeBuilder.append("${FORM_MAP},")
-            parametersBuilder.append("$FORM_MAP",)
         }
 
         declareVariableBuilder = new StringBuilder(declareVariableBuilder.toString().split(",").join(","))
@@ -153,11 +148,11 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         haveQueryParameter && builder.append(queryParameterBuilder)
 
         if (returnType().simpleName != "void") {
-            builder.append("\n${returnType().simpleName} result = ${name()}(")
+            builder.append("\n${returnType().simpleName} $RESULT = ${name()}(")
             invokeBuilder.length() > 0 && builder.append("${invokeBuilder.toString()}")
 
             builder.append(")\n")
-            builder.append("println gson.toJson(result)\n")
+            builder.append("println gson.toJson($REQUEST)\n")
         } else {
             builder.append("\n${name()}(")
             invokeBuilder.length() > 0 && builder.append("${invokeBuilder.toString()}")
@@ -183,7 +178,7 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         } else if (haveFiles) {
             builder.append("${fileName}.each{\n")
             builder.append("${REQUEST}.multiPart('${fileName}',it)\n")
-            builder.append('}')
+            builder.append('}\n')
         }
         if (haveBody) {
             ImportQueue.instance.add(ContentType.class.name)
@@ -196,7 +191,7 @@ abstract class TestAbstractGenerator implements ITestGenerator {
             builder.append("}\n")
         }
         if (haveFormParameter) {
-            builder.append("${QUERY_MAP}.each{\n")
+            builder.append("${formName}.each{\n")
             builder.append("${REQUEST}.formParam(it.key,it.value)")
             builder.append("}\n")
         }
@@ -240,7 +235,9 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         parametersBuilder.append("${aClass.simpleName} ${name},")
     }
 
-    protected void modelAttribute(StringBuilder formParameterBuilder, String name) {
-        formParameterBuilder.append("${name}:new Object(),\n")
+    protected void modelAttribute(StringBuilder formParameterBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, String name) {
+        formParameterBuilder.append("Map $name = [\n]")
+        invokeBuilder.append("$name,")
+        parametersBuilder.append("Map $name,")
     }
 }
