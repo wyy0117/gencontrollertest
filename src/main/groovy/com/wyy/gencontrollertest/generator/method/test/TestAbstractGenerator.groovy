@@ -99,34 +99,34 @@ abstract class TestAbstractGenerator implements ITestGenerator {
             ParameterReader parameterReader = new ParameterReader(it)
             def annotation = parameterReader.annotation
             if (annotation instanceof PathVariable) {
-                pathVariable(declareVariableBuilder, invokeBuilder, parametersBuilder, pathParametersBuilder, parameterReader.type(), parameterReader.key())
+                pathVariable(declareVariableBuilder, invokeBuilder, parametersBuilder, pathParametersBuilder, parameterReader)
             } else if (annotation instanceof RequestParam) {
                 haveQueryParameter = true
-                requestParameter(queryParameterBuilder, parameterReader.key())
+                requestParameter(queryParameterBuilder, parameterReader)
             } else if (annotation instanceof RequestBody) {
                 haveBody = true
-                bodyName = parameterReader.key()
-                requestBody(declareVariableBuilder, invokeBuilder, parametersBuilder, parameterReader.type(), parameterReader.key())
+                bodyName = parameterReader.parameterName()
+                requestBody(declareVariableBuilder, invokeBuilder, parametersBuilder, parameterReader)
             } else if (annotation instanceof ModelAttribute) {
                 haveFormParameter = true
-                formName = parameterReader.key()
-                modelAttribute(formParameterBuilder, invokeBuilder, parametersBuilder, parameterReader.key())
+                formName = parameterReader.parameterName()
+                modelAttribute(formParameterBuilder, invokeBuilder, parametersBuilder, parameterReader)
             } else if (parameterReader.type().name == MultipartFile[].class.name) {
                 haveFiles = true
                 ImportQueue.instance.add(File.class.getName())
-                fileName = parameterReader.key()
-                declareVariableBuilder.append("File[] ${parameterReader.key()} = []\n")
-                invokeBuilder.append("${parameterReader.key()},")
-                parametersBuilder.append("File[] ${parameterReader.key()},")
+                fileName = parameterReader.parameterName()
+                declareVariableBuilder.append("File[] ${parameterReader.parameterName()} = []\n")
+                invokeBuilder.append("${parameterReader.parameterName()},")
+                parametersBuilder.append("File[] ${parameterReader.parameterName()},")
             } else if (parameterReader.type().name == MultipartFile.class.name) {
                 haveFile = true
                 ImportQueue.instance.add(File.class.name)
-                fileName = parameterReader.key()
-                declareVariableBuilder.append("File ${parameterReader.key()} = new File('')\n")
-                invokeBuilder.append("${parameterReader.key()},")
-                parametersBuilder.append("File ${parameterReader.key()},")
+                fileName = parameterReader.parameterName()
+                declareVariableBuilder.append("File ${parameterReader.parameterName()} = new File('')\n")
+                invokeBuilder.append("${parameterReader.parameterName()},")
+                parametersBuilder.append("File ${parameterReader.parameterName()},")
             } else {
-                println "${name()} parameter ${parameterReader.key()} have no annotation"
+                println "${name()} parameter ${parameterReader.parameterName()} have no annotation"
             }
         }
 
@@ -212,32 +212,46 @@ abstract class TestAbstractGenerator implements ITestGenerator {
     }
 
     //肯定是java.lang 中的类，不需要import
-    protected void pathVariable(StringBuilder declareVariableBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, StringBuilder pathParametersBuilder, Class aClass, String name) {
-        declareVariableBuilder.append("${aClass.simpleName} ${name} = new Object()\n")
-        invokeBuilder.append("${name},")
-        parametersBuilder.append("${aClass.simpleName} ${name},")
-        pathParametersBuilder.append("${name},")
+    protected void pathVariable(StringBuilder declareVariableBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, StringBuilder pathParametersBuilder, ParameterReader parameterReader) {
+        declareVariableBuilder.append("${parameterReader.type().simpleName} ${parameterReader.parameterName()} = new Object()\n")
+        invokeBuilder.append("${parameterReader.parameterName()},")
+        parametersBuilder.append("${parameterReader.type().simpleName} ${parameterReader.parameterName()},")
+        pathParametersBuilder.append("${parameterReader.parameterName()},")
     }
 
     //肯定是java.lang 中的类，不需要import
-    protected void requestParameter(StringBuilder queryParameterBuilder, String name) {
-        queryParameterBuilder.append("${name}:new Object(),\n")
+    protected void requestParameter(StringBuilder queryParameterBuilder, ParameterReader parameterReader) {
+        queryParameterBuilder.append("${parameterReader.parameterName()}:new Object(),\n")
     }
 
-    protected void requestBody(StringBuilder declareVariableBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, Class aClass, String name) {
-        ImportQueue.instance.add(aClass.name)
-        if (aClass.isInterface()) {
-            declareVariableBuilder.append("${aClass.simpleName} ${name} = new Object()\n")
-        } else {
-            declareVariableBuilder.append("${aClass.simpleName} ${name} = new ${aClass.simpleName}()\n")
+    protected void requestBody(StringBuilder declareVariableBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, ParameterReader parameterReader) {
+        ImportQueue.instance.add(parameterReader.type().name)
+        declareVariableBuilder.append("${parameterReader.type().simpleName}")
+        if (parameterReader.actualTypes()) {
+            parameterReader.actualTypes().each {
+                ImportQueue.instance.add(it.name)
+            }
+            declareVariableBuilder.append("<${parameterReader.actualTypes()*.simpleName.join(",")}>")
         }
-        invokeBuilder.append("$name ,")
-        parametersBuilder.append("${aClass.simpleName} ${name},")
+        declareVariableBuilder.append(" ${parameterReader.parameterName()} ")
+
+        if (parameterReader.type().isInterface()) {
+            declareVariableBuilder.append("= new Object()\n")
+        } else {
+            declareVariableBuilder.append("= new ${parameterReader.type().simpleName}<>()\n")
+        }
+
+        invokeBuilder.append("${parameterReader.parameterName()} ,")
+        parametersBuilder.append("${parameterReader.type().simpleName}")
+        if (parameterReader.actualTypes()) {
+            parametersBuilder.append("<${parameterReader.actualTypes()*.simpleName.join(",")}>")
+        }
+        parametersBuilder.append(" ${parameterReader.parameterName()},")
     }
 
-    protected void modelAttribute(StringBuilder formParameterBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, String name) {
-        formParameterBuilder.append("Map $name = [\n]")
-        invokeBuilder.append("$name,")
-        parametersBuilder.append("Map $name,")
+    protected void modelAttribute(StringBuilder formParameterBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, ParameterReader parameterReader) {
+        formParameterBuilder.append("Map ${parameterReader.parameterName()} = [\n]")
+        invokeBuilder.append("${parameterReader.parameterName()},")
+        parametersBuilder.append("Map ${parameterReader.parameterName()},")
     }
 }
