@@ -54,17 +54,17 @@ A：对于单元测试来说，速度，性能等都是无关紧要的，最终�
     }
     ```  
 1. 配置参数说明  
-| 参数            | 默认值                   | 解释                       |
-|---------------|-----------------------|--------------------------|
-| aClass        |                       | 要生产测试代码的controller类      |
-| packageName   | 默认使用controller的包路径    | 生成的代码的包路径，决定了生成代码的路径信息   |
-| author        | 系统当前用户的用户名            | 作者信息                     |
-| host          | http://localhost:8080 | 服务器的域名                   |
-| context       |                       | 接口的application context   |
-| authType      |                       | 认证类型                     |
-| before        | false                 | 是否生产before               |
-| after         | false                 | 是否生产after                |
-| testClassName | controller的类名\+Test   | 单元测试类的名字                 |
+ 参数            | 默认值                   | 解释                     
+---------------|-----------------------|--------------------------  
+ aClass        |                       | 要生产测试代码的controller类      
+ packageName   | 默认使用controller的包路径    | 生成的代码的包路径，决定了生成代码的路径信息   
+ author        | 系统当前用户的用户名            | 作者信息                     
+ host          | http://localhost:8080 | 服务器的域名                   
+ context       |                       | 接口的application context   
+ authType      |                       | 认证类型                     
+ before        | false                 | 是否生产before               
+ after         | false                 | 是否生产after                
+ testClassName | controller的类名\+Test   | 单元测试类的名字                 
 #### 遗留问题
 1. ~~代码格式化~~--->因为现在的编辑器都有格式化代码的功能，所以生成的代码没有格式化问题也不大。  
 
