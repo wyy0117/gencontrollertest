@@ -25,7 +25,7 @@ class ParameterReader {
                 ?: parameter.getAnnotation(ModelAttribute.class)
     }
 
-    final Class type() {
+    final Class<?> type() {
         parameter.type
     }
 

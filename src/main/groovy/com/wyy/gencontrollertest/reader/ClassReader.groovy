@@ -16,6 +16,10 @@ class ClassReader {
         this.aClass = aClass
     }
 
+    String className() {
+        aClass.simpleName
+    }
+
     final Method[] methods() {
         aClass.declaredMethods
     }

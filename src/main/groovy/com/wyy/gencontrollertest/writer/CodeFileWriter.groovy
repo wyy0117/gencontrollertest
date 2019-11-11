@@ -1,6 +1,7 @@
 package com.wyy.gencontrollertest.writer
 
 import com.wyy.gencontrollertest.config.GeneratorConfig
+import com.wyy.gencontrollertest.reader.ClassReader
 
 /**
  * @Date: 19-11-4
@@ -21,7 +22,8 @@ class CodeFileWriter {
             folder.mkdirs()
         }
 
-        String fileName = config.aClass.simpleName + "Test.groovy"
+        String fileName = (config.testClassName ?: new ClassReader(config.aClass).className() + "Test") + ".groovy"
+
         folder.listFiles()
         int size = folder.listFiles({ file, name ->
             return name.startsWith(fileName)

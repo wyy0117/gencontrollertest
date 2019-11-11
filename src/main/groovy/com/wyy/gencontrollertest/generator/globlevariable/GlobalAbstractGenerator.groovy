@@ -1,8 +1,11 @@
 package com.wyy.gencontrollertest.generator.globlevariable
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.wyy.gencontrollertest.config.AuthType
 import com.wyy.gencontrollertest.config.ConfigConstant
 import com.wyy.gencontrollertest.config.GeneratorConfig
+import com.wyy.gencontrollertest.generator.prefix.ImportQueue
 import com.wyy.gencontrollertest.reader.ClassReader
 
 /**
@@ -32,6 +35,9 @@ abstract class GlobalAbstractGenerator implements IGlobalVariableGenerator {
         StringBuilder builder = new StringBuilder()
         builder.append("private String ${ConfigConstant.HOST} = '${host()}'\n")
         builder.append("private String ${ConfigConstant.CONTEXT} = '${context()}'\n")
+        ImportQueue.instance.add(Gson.class.name)
+        ImportQueue.instance.add(GsonBuilder.class.name)
+        builder.append("private final Gson gson = new GsonBuilder().setPrettyPrinting().create()\n")
 
         if (config.authType != null) {
             builder.append("private String ${ConfigConstant.USERNAME} = 'username'//todo\n")

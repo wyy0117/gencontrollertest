@@ -33,6 +33,11 @@ class GeneratorConfig {
      */
     boolean after = false
 
+    /**
+     * 单元测试类的名字
+     */
+    String testClassName
+
     String getPackageName() {
         packageName ?: aClass.package.name
     }

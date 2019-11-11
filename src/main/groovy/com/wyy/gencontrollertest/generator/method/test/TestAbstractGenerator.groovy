@@ -24,7 +24,8 @@ import java.lang.reflect.Parameter
  */
 abstract class TestAbstractGenerator implements ITestGenerator {
 
-    private final String REQUEST_PARAMETER_MAP = 'requestParameter'
+    private final String QUERY_MAP = 'queryMap'
+    private final String FORM_MAP = 'formMap'
     private final String REQUEST = "request"
 
     private Method method
@@ -74,8 +75,8 @@ abstract class TestAbstractGenerator implements ITestGenerator {
 
         StringBuilder declareVariableBuilder = new StringBuilder()//声明变量
 
-        // 定义一个map，作为requestParameter的声明
-        StringBuilder requestParameterMap = new StringBuilder("Map ${REQUEST_PARAMETER_MAP} = [\n")
+        StringBuilder queryParameterBuilder = new StringBuilder("Map $QUERY_MAP = [\n")
+        StringBuilder formParameterBuilder = new StringBuilder("Map $FORM_MAP = [\n")
 
         StringBuilder invokeBuilder = new StringBuilder()//调用方法
         StringBuilder parametersBuilder = new StringBuilder()//方法定义参数
@@ -88,10 +89,10 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         boolean haveFiles = false
         String fileName = ""
 
-        boolean haveForm = false
         String formName = ''
 
-        boolean haveReqeustParameter = false
+        boolean haveQueryParameter = false
+        boolean haveFormParameter = false
 
         Parameter[] parameters = methodReader.parameters()
         parameters.each {
@@ -100,18 +101,18 @@ abstract class TestAbstractGenerator implements ITestGenerator {
             if (annotation instanceof PathVariable) {
                 pathVariable(declareVariableBuilder, invokeBuilder, parametersBuilder, pathParametersBuilder, parameterReader.type(), parameterReader.key())
             } else if (annotation instanceof RequestParam) {
-                haveReqeustParameter = true
-                requestParameter(requestParameterMap, parameterReader.key())
+                haveQueryParameter = true
+                requestParameter(queryParameterBuilder, parameterReader.key())
             } else if (annotation instanceof RequestBody) {
                 haveBody = true
                 bodyName = parameterReader.key()
                 requestBody(declareVariableBuilder, invokeBuilder, parametersBuilder, parameterReader.type(), parameterReader.key())
             } else if (annotation instanceof ModelAttribute) {
+                haveFormParameter = true
                 formName = parameterReader.key()
-                modelAttribute(declareVariableBuilder, invokeBuilder, parametersBuilder, parameterReader.key())
+                modelAttribute(formParameterBuilder, parameterReader.key())
             } else if (parameterReader.type().name == MultipartFile[].class.name) {
                 haveFiles = true
-                haveForm = true
                 ImportQueue.instance.add(File.class.getName())
                 fileName = parameterReader.key()
                 declareVariableBuilder.append("File[] ${parameterReader.key()} = []")
@@ -119,7 +120,6 @@ abstract class TestAbstractGenerator implements ITestGenerator {
                 parametersBuilder.append("File[] ${parameterReader.key()},")
             } else if (parameterReader.type().name == MultipartFile.class.name) {
                 haveFile = true
-                haveForm = true
                 ImportQueue.instance.add(File.class.name)
                 fileName = parameterReader.key()
                 declareVariableBuilder.append("File ${parameterReader.key()} = new File()")
@@ -129,23 +129,41 @@ abstract class TestAbstractGenerator implements ITestGenerator {
                 println "${name()} parameter ${parameterReader.key()} have no annotation"
             }
         }
-        haveReqeustParameter && parametersBuilder.append("Map ${REQUEST_PARAMETER_MAP},")
-        haveReqeustParameter && invokeBuilder.append(REQUEST_PARAMETER_MAP)
+
+        if (haveQueryParameter) {
+            invokeBuilder.append("${QUERY_MAP},")
+            parametersBuilder.append("${QUERY_MAP},")
+        }
+
+        if (haveFormParameter) {
+            invokeBuilder.append("${FORM_MAP},")
+            parametersBuilder.append("$FORM_MAP",)
+        }
 
         declareVariableBuilder = new StringBuilder(declareVariableBuilder.toString().split(",").join(","))
-        requestParameterMap = new StringBuilder(requestParameterMap.toString().split(",").join(","))
+        queryParameterBuilder = new StringBuilder(queryParameterBuilder.toString().split(",").join(","))
         invokeBuilder = new StringBuilder(invokeBuilder.toString().split(",").join(","))
         parametersBuilder = new StringBuilder(parametersBuilder.toString().split(",").join(","))
         pathParametersBuilder = new StringBuilder(pathParametersBuilder.toString().split(",").join(","))
 
-        requestParameterMap.append("]\n")//requestMap最后拼接】
+        queryParameterBuilder.append("]\n")//requestMap最后拼接】
 
         builder.append(declareVariableBuilder)
-        haveReqeustParameter && builder.append(requestParameterMap)
-        builder.append("\n${name()}(")
-        invokeBuilder.length() > 0 && builder.append("${invokeBuilder.toString()}")
+        haveFormParameter && builder.append(formParameterBuilder)
+        haveQueryParameter && builder.append(queryParameterBuilder)
 
-        builder.append(")\n}\n")
+        if (returnType().simpleName != "void") {
+            builder.append("\n${returnType().simpleName} result = ${name()}(")
+            invokeBuilder.length() > 0 && builder.append("${invokeBuilder.toString()}")
+
+            builder.append(")\n")
+            builder.append("println gson.toJson(result)\n")
+        } else {
+            builder.append("\n${name()}(")
+            invokeBuilder.length() > 0 && builder.append("${invokeBuilder.toString()}")
+            builder.append(")\n")
+        }
+        builder.append("}\n\n")
 
         //测试的真实方法
         builder.append("private ${returnType().simpleName} ${name()}(")
@@ -159,30 +177,34 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         } else if (config.authType == AuthType.BASIC) {
             builder.append(".auth().preemptive().basic(\"${ConfigConstant.USERNAME}\", \"${ConfigConstant.PASSWORD}\")\n")
         }
+
         if (haveFile) {
             builder.append(".multiPart('${fileName}',${fileName})\n")
         } else if (haveFiles) {
-            builder.append(".multiPart('${fileName}',${fileName}[0])\n")
+            builder.append("${fileName}.each{\n")
+            builder.append("${REQUEST}.multiPart('${fileName}',it)\n")
+            builder.append('}')
         }
         if (haveBody) {
             ImportQueue.instance.add(ContentType.class.name)
             builder.append('.contentType(ContentType.JSON)\n')
             builder.append(".body(${bodyName})\n")
         }
-
-        if (haveForm) {
-            builder.append("${formName}.each {\n")
-            builder.append("${REQUEST}.multiPart(it.key, it.value)\n")
+        if (haveQueryParameter) {
+            builder.append("${QUERY_MAP}.each{\n")
+            builder.append("${REQUEST}.queryParam(it.key,it.value)")
             builder.append("}\n")
         }
-        if (haveReqeustParameter) {
-            builder.append("${REQUEST}.${requestMethod()}('${url()}' , $REQUEST_PARAMETER_MAP)\n")
+        if (haveFormParameter) {
+            builder.append("${QUERY_MAP}.each{\n")
+            builder.append("${REQUEST}.formParam(it.key,it.value)")
+            builder.append("}\n")
+        }
+
+        if (pathParametersBuilder.length() > 0) {
+            builder.append("${REQUEST}.${requestMethod()}('${url()}',${pathParametersBuilder.toString()})\n")
         } else {
-            if (pathParametersBuilder.length() > 0) {
-                builder.append("${REQUEST}.${requestMethod()}('${url()}',${pathParametersBuilder.toString()})\n")
-            } else {
-                builder.append("${REQUEST}.${requestMethod()}('${url()}')\n")
-            }
+            builder.append("${REQUEST}.${requestMethod()}('${url()}')\n")
         }
 
         if (returnType().name == void.class.name) {
@@ -203,8 +225,8 @@ abstract class TestAbstractGenerator implements ITestGenerator {
     }
 
     //肯定是java.lang 中的类，不需要import
-    protected void requestParameter(StringBuilder declareMapBuilder, String name) {
-        declareMapBuilder.append("${name}:new Object(),\n")
+    protected void requestParameter(StringBuilder queryParameterBuilder, String name) {
+        queryParameterBuilder.append("${name}:new Object(),\n")
     }
 
     protected void requestBody(StringBuilder declareVariableBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, Class aClass, String name) {
@@ -218,9 +240,7 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         parametersBuilder.append("${aClass.simpleName} ${name},")
     }
 
-    protected void modelAttribute(StringBuilder declareVariableBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, String name) {
-        declareVariableBuilder.append("Map ${name} = [:]\n")
-        invokeBuilder.append("$name ,")
-        parametersBuilder.append("Map ${name},")
+    protected void modelAttribute(StringBuilder formParameterBuilder, String name) {
+        formParameterBuilder.append("${name}:new Object(),\n")
     }
 }
