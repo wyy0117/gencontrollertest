@@ -4,6 +4,7 @@ import com.wyy.test.rest.dto.UserDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,8 +40,8 @@ public class RestApiController {
     }
 
     @PostMapping("hello5")
-    public void hello5(@ModelAttribute UserDTO dto, MultipartFile[] files) {
-
+    public List<UserDTO> hello5(@ModelAttribute UserDTO dto, MultipartFile[] files) {
+        return new ArrayList<>();
     }
 
 }

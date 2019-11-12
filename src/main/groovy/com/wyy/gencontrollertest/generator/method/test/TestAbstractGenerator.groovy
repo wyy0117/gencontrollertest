@@ -236,9 +236,13 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         declareVariableBuilder.append(" ${parameterReader.parameterName()} ")
 
         if (parameterReader.type().isInterface()) {
-            declareVariableBuilder.append("= new Object()\n")
+            declareVariableBuilder.append("= null\n")
         } else {
-            declareVariableBuilder.append("= new ${parameterReader.type().simpleName}<>()\n")
+            declareVariableBuilder.append("= new ${parameterReader.type().simpleName}")
+            if (parameterReader.actualTypes()) {
+                declareVariableBuilder.append("<>")
+            }
+            declareVariableBuilder.append("()\n")
         }
 
         invokeBuilder.append("${parameterReader.parameterName()} ,")
@@ -250,7 +254,11 @@ abstract class TestAbstractGenerator implements ITestGenerator {
     }
 
     protected void modelAttribute(StringBuilder formParameterBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, ParameterReader parameterReader) {
-        formParameterBuilder.append("Map ${parameterReader.parameterName()} = [\n]")
+        formParameterBuilder.append("Map ${parameterReader.parameterName()} = [\n")
+        parameterReader.fieldNames().each {
+            formParameterBuilder.append("${it}:null,\n")
+        }
+        formParameterBuilder.append("]\n")
         invokeBuilder.append("${parameterReader.parameterName()},")
         parametersBuilder.append("Map ${parameterReader.parameterName()},")
     }

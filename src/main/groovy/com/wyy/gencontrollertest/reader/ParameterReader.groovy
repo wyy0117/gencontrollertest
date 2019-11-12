@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl
 
+import java.beans.PropertyDescriptor
+import java.lang.reflect.Field
+import java.lang.reflect.Method
 import java.lang.reflect.Parameter
 import java.lang.reflect.Type
 
@@ -50,6 +53,25 @@ class ParameterReader {
     }
 
     final String parameterName() {
+        fieldNames()
         parameter.name
+    }
+
+    /**
+     * 本应该通过反射只返回有set方法的属性，但是因为build模式下反射不到所有属性的set方法，所以暂时返回所有的属性
+     * @return
+     */
+    final List<String> fieldNames() {
+        Class<?> clazz = parameter.type
+        Field[] fields = clazz.declaredFields
+
+        //build模式下，无法反射出set方法，坑
+//        List<String> fieldNames = fields.find({
+//            PropertyDescriptor propertyDescriptor = new PropertyDescriptor(it.name, clazz)
+//            Method method = propertyDescriptor.getWriteMethod()
+//            method != null
+//        }).collect({ it.name })
+//        fieldNames
+        fields*.name
     }
 }
