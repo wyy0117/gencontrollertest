@@ -1,17 +1,18 @@
 package com.wyy.test.gen
 
-import org.junit.Before
-import io.restassured.http.ContentType
-import org.junit.Test
-import io.restassured.specification.RequestSpecification
-import com.wyy.test.rest.dto.UserDTO
-import java.io.File
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import static io.restassured.RestAssured.*
+import com.wyy.test.rest.dto.UserDTO
+import io.restassured.http.ContentType
+import io.restassured.specification.RequestSpecification
+import org.junit.Before
+import org.junit.Test
+
+import static io.restassured.RestAssured.baseURI
+import static io.restassured.RestAssured.given
 
 /**
- * @Date: 2019-11-11 16:18:19
+ * @Date: 2019-11-12 20:12:49
  * @Author: wyy
  */
 
@@ -34,6 +35,28 @@ class RestApiControllerTest {
                 .then()
                 .extract()
                 .path('token')//todo
+    }
+
+    @Test
+    void helloTest() {
+        Map queryMap = [
+                a: "abc",
+                b: null,
+                c: 1,
+        ]
+
+        String result = hello(queryMap)
+        println gson.toJson(request)
+    }
+
+    private String hello(queryMap) {
+        RequestSpecification request = given()
+                .header('Authorization', jwtToken)
+        queryMap.each {
+            request.queryParam(it.key, it.value)
+        }
+        request.get('hello')
+                .as(String.class)
     }
 
     @Test
@@ -72,7 +95,10 @@ class RestApiControllerTest {
     void hello3Test() {
         File file = new File('')
         Map dto = [
+                username: null,
+                age     : null,
         ]
+
         hello3(dto, file)
     }
 
@@ -90,12 +116,12 @@ class RestApiControllerTest {
 
     @Test
     void hello4Test() {
-        List dto = new Object()
+        List<UserDTO> dto = null
 
         hello4(dto)
     }
 
-    private void hello4(List dto) {
+    private void hello4(List<UserDTO> dto) {
         RequestSpecification request = given()
                 .header('Authorization', jwtToken)
                 .contentType(ContentType.JSON)
@@ -109,11 +135,15 @@ class RestApiControllerTest {
     void hello5Test() {
         File[] files = []
         Map dto = [
+                username: null,
+                age     : null,
         ]
-        hello5(dto, files)
+
+        List result = hello5(dto, files)
+        println gson.toJson(request)
     }
 
-    private void hello5(Map dto, File[] files) {
+    private List hello5(Map dto, File[] files) {
         RequestSpecification request = given()
                 .header('Authorization', jwtToken)
         files.each {
@@ -123,29 +153,7 @@ class RestApiControllerTest {
             request.formParam(it.key, it.value)
         }
         request.post('hello5')
-                .then()
-                .statusCode(200)
-    }
-
-    @Test
-    void helloTest() {
-        Map queryMap = [
-                a: new Object(),
-                b: new Object(),
-        ]
-
-        String result = hello(queryMap)
-        println gson.toJson(request)
-    }
-
-    private String hello(queryMap) {
-        RequestSpecification request = given()
-                .header('Authorization', jwtToken)
-        queryMap.each {
-            request.queryParam(it.key, it.value)
-        }
-        request.get('hello')
-                .as(String.class)
+                .as(List.class)
     }
 
 }

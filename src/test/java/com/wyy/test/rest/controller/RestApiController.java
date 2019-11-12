@@ -15,7 +15,7 @@ import java.util.List;
 public class RestApiController {
 
     @GetMapping("hello")
-    public String hello(@RequestParam String a, @RequestParam String b) {
+    public String hello(@RequestParam(defaultValue = "abc") String a, @RequestParam String b, @RequestParam(defaultValue = "1") int c) {
         return "hello";
     }
 

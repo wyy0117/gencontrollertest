@@ -1,15 +1,10 @@
 package com.wyy.gencontrollertest.reader
 
 
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl
 
-import java.beans.PropertyDescriptor
 import java.lang.reflect.Field
-import java.lang.reflect.Method
 import java.lang.reflect.Parameter
 import java.lang.reflect.Type
 
@@ -53,7 +48,6 @@ class ParameterReader {
     }
 
     final String parameterName() {
-        fieldNames()
         parameter.name
     }
 
@@ -73,5 +67,17 @@ class ParameterReader {
 //        }).collect({ it.name })
 //        fieldNames
         fields*.name
+    }
+
+    /**
+     * 只有RequestParam才有defaultValue
+     * @return
+     */
+    final String defaultValue() {
+        RequestParam annotation = parameter.getAnnotation(RequestParam.class)
+        if (annotation == null || annotation.defaultValue() == ValueConstants.DEFAULT_NONE) {
+            return null
+        }
+        annotation.defaultValue()
     }
 }

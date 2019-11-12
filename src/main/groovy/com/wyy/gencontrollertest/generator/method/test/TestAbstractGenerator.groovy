@@ -221,7 +221,16 @@ abstract class TestAbstractGenerator implements ITestGenerator {
 
     //肯定是java.lang 中的类，不需要import
     protected void requestParameter(StringBuilder queryParameterBuilder, ParameterReader parameterReader) {
-        queryParameterBuilder.append("${parameterReader.parameterName()}:new Object(),\n")
+        queryParameterBuilder.append("${parameterReader.parameterName()}:")
+        if (parameterReader.defaultValue() == null) {
+            queryParameterBuilder.append("null,\n")
+        } else {
+            if (parameterReader.type() == String.class) {
+                queryParameterBuilder.append("\"${parameterReader.defaultValue()}\",\n")
+            } else {
+                queryParameterBuilder.append("${parameterReader.defaultValue()},\n")
+            }
+        }
     }
 
     protected void requestBody(StringBuilder declareVariableBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, ParameterReader parameterReader) {
