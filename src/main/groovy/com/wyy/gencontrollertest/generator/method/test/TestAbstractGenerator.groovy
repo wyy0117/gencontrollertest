@@ -152,7 +152,7 @@ abstract class TestAbstractGenerator implements ITestGenerator {
             invokeBuilder.length() > 0 && builder.append("${invokeBuilder.toString()}")
 
             builder.append(")\n")
-            builder.append("println gson.toJson($REQUEST)\n")
+            builder.append("println gson.toJson($RESULT)\n")
         } else {
             builder.append("\n${name()}(")
             invokeBuilder.length() > 0 && builder.append("${invokeBuilder.toString()}")
