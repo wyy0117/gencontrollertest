@@ -12,7 +12,7 @@ import static io.restassured.RestAssured.baseURI
 import static io.restassured.RestAssured.given
 
 /**
- * @Date: 2019-11-12 20:12:49
+ * @Date: 2019-11-13 17:03:20
  * @Author: wyy
  */
 
@@ -46,7 +46,7 @@ class RestApiControllerTest {
         ]
 
         String result = hello(queryMap)
-        println gson.toJson(request)
+        println gson.toJson(result)
     }
 
     private String hello(queryMap) {
@@ -64,7 +64,7 @@ class RestApiControllerTest {
         long id = new Object()
 
         String result = hello1(id)
-        println gson.toJson(request)
+        println gson.toJson(result)
     }
 
     private String hello1(long id) {
@@ -139,11 +139,11 @@ class RestApiControllerTest {
                 age     : null,
         ]
 
-        List result = hello5(dto, files)
-        println gson.toJson(request)
+        List<UserDTO> result = hello5(dto, files)
+        println gson.toJson(result)
     }
 
-    private List hello5(Map dto, File[] files) {
+    private List<UserDTO> hello5(Map dto, File[] files) {
         RequestSpecification request = given()
                 .header('Authorization', jwtToken)
         files.each {

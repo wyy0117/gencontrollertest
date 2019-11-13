@@ -1,9 +1,11 @@
 package com.wyy.gencontrollertest.reader
 
 import org.springframework.web.bind.annotation.*
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl
 
 import java.lang.reflect.Method
 import java.lang.reflect.Parameter
+import java.lang.reflect.Type
 
 /**
  * @Date: 19-11-3
@@ -67,5 +69,19 @@ class MethodReader {
      */
     final Class<?> returnType() {
         method.returnType
+    }
+
+    /**
+     * 泛型类型
+     * @return
+     */
+    final Class<?>[] actualTypes() {
+        Type parameterizedType = method.genericReturnType
+        if (parameterizedType != null) {
+            if (parameterizedType instanceof ParameterizedTypeImpl) {
+                return (Class<?>[]) parameterizedType.actualTypeArguments
+            }
+        }
+        return []
     }
 }

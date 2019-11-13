@@ -148,7 +148,13 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         haveQueryParameter && builder.append(queryParameterBuilder)
 
         if (returnType().simpleName != "void") {
-            builder.append("\n${returnType().simpleName} $RESULT = ${name()}(")
+            builder.append("\n${returnType().simpleName}")
+
+            if (methodReader.actualTypes()) {
+                methodReader.actualTypes().each { ImportQueue.instance.add(it.name) }
+                builder.append("<${methodReader.actualTypes()*.simpleName.join(",")}>")
+            }
+            builder.append(" $RESULT = ${name()}(")
             invokeBuilder.length() > 0 && builder.append("${invokeBuilder.toString()}")
 
             builder.append(")\n")
@@ -161,7 +167,11 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         builder.append("}\n\n")
 
         //测试的真实方法
-        builder.append("private ${returnType().simpleName} ${name()}(")
+        builder.append("private ${returnType().simpleName}")
+        if (methodReader.actualTypes()) {
+            builder.append("<${methodReader.actualTypes()*.simpleName.join(",")}>")
+        }
+        builder.append(" ${name()}(")
         builder.append(parametersBuilder)
 
         builder.append("){\n")
