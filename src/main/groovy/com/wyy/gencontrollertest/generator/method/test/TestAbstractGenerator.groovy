@@ -7,6 +7,9 @@ import com.wyy.gencontrollertest.generator.prefix.ImportQueue
 import com.wyy.gencontrollertest.reader.MethodReader
 import com.wyy.gencontrollertest.reader.ParameterReader
 import io.restassured.http.ContentType
+import io.restassured.response.Response
+import io.restassured.response.Validatable
+import io.restassured.response.ValidatableResponse
 import io.restassured.specification.RequestSpecification
 import org.junit.Test
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -27,6 +30,7 @@ abstract class TestAbstractGenerator implements ITestGenerator {
     private final String QUERY_MAP = 'queryMap'
     private final String REQUEST = "request"
     private final String RESULT = 'result'
+    private final String RESPONSE = 'response'
 
     private Method method
     private MethodReader methodReader
@@ -206,18 +210,20 @@ abstract class TestAbstractGenerator implements ITestGenerator {
             builder.append("}\n")
         }
 
+        ImportQueue.instance.add(Validatable.class.name)
+        ImportQueue.instance.add(ValidatableResponse.class.name)
+        ImportQueue.instance.add(Response.class.name)
         if (pathParametersBuilder.length() > 0) {
-            builder.append("${REQUEST}.${requestMethod()}('${url()}',${pathParametersBuilder.toString()})\n")
+            builder.append("${Validatable.class.simpleName}<${ValidatableResponse.class.simpleName}, ${Response.class.simpleName}> ${RESPONSE} = ${REQUEST}.${requestMethod()}('${url()}',${pathParametersBuilder.toString()})\n")
         } else {
-            builder.append("${REQUEST}.${requestMethod()}('${url()}')\n")
+            builder.append("${Validatable.class.simpleName}<${ValidatableResponse.class.simpleName}, ${Response.class.simpleName}> ${RESPONSE} = ${REQUEST}.${requestMethod()}('${url()}')\n")
         }
+        builder.append("${RESPONSE}.then().statusCode(200)\n")
 
-        if (returnType().name == void.class.name) {
-            builder.append(".then()\n")
-            builder.append(".statusCode(200)\n}\n")
-        } else {
-            builder.append(".as(${returnType().simpleName}.class)\n}\n\n")
+        if (returnType().name != void.class.name) {
+            builder.append("${RESPONSE}.as(${returnType().simpleName}.class)\n")
         }
+        builder.append("}\n")
         builder
     }
 

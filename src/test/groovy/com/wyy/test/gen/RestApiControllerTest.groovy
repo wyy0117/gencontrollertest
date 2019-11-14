@@ -1,18 +1,20 @@
 package com.wyy.test.gen
 
+import org.junit.Before
+import io.restassured.http.ContentType
+import org.junit.Test
+import io.restassured.specification.RequestSpecification
+import io.restassured.response.Validatable
+import io.restassured.response.ValidatableResponse
+import io.restassured.response.Response
+import com.wyy.test.rest.dto.UserDTO
+import java.io.File
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.wyy.test.rest.dto.UserDTO
-import io.restassured.http.ContentType
-import io.restassured.specification.RequestSpecification
-import org.junit.Before
-import org.junit.Test
-
-import static io.restassured.RestAssured.baseURI
-import static io.restassured.RestAssured.given
+import static io.restassured.RestAssured.*
 
 /**
- * @Date: 2019-11-13 17:03:20
+ * @Date: 2019-11-14 10:12:37
  * @Author: wyy
  */
 
@@ -55,8 +57,9 @@ class RestApiControllerTest {
         queryMap.each {
             request.queryParam(it.key, it.value)
         }
-        request.get('hello')
-                .as(String.class)
+        Validatable<ValidatableResponse, Response> response = request.get('hello')
+        response.then().statusCode(200)
+        response.as(String.class)
     }
 
     @Test
@@ -70,8 +73,9 @@ class RestApiControllerTest {
     private String hello1(long id) {
         RequestSpecification request = given()
                 .header('Authorization', jwtToken)
-        request.delete('hello1', id)
-                .as(String.class)
+        Validatable<ValidatableResponse, Response> response = request.delete('hello1', id)
+        response.then().statusCode(200)
+        response.as(String.class)
     }
 
     @Test
@@ -86,9 +90,8 @@ class RestApiControllerTest {
                 .header('Authorization', jwtToken)
                 .contentType(ContentType.JSON)
                 .body(dto)
-        request.post('hello2')
-                .then()
-                .statusCode(200)
+        Validatable<ValidatableResponse, Response> response = request.post('hello2')
+        response.then().statusCode(200)
     }
 
     @Test
@@ -109,9 +112,8 @@ class RestApiControllerTest {
         dto.each {
             request.formParam(it.key, it.value)
         }
-        request.post('hello3')
-                .then()
-                .statusCode(200)
+        Validatable<ValidatableResponse, Response> response = request.post('hello3')
+        response.then().statusCode(200)
     }
 
     @Test
@@ -126,9 +128,8 @@ class RestApiControllerTest {
                 .header('Authorization', jwtToken)
                 .contentType(ContentType.JSON)
                 .body(dto)
-        request.post('hello4')
-                .then()
-                .statusCode(200)
+        Validatable<ValidatableResponse, Response> response = request.post('hello4')
+        response.then().statusCode(200)
     }
 
     @Test
@@ -152,8 +153,8 @@ class RestApiControllerTest {
         dto.each {
             request.formParam(it.key, it.value)
         }
-        request.post('hello5')
-                .as(List.class)
+        Validatable<ValidatableResponse, Response> response = request.post('hello5')
+        response.then().statusCode(200)
+        response.as(List.class)
     }
-
 }
