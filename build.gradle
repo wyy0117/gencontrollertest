@@ -2,10 +2,11 @@ plugins {
     id 'groovy'
     id 'java'
     id 'maven'
+    id("maven-publish")
 }
 
 group 'com.wyy'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 sourceCompatibility = 1.8
 
@@ -33,4 +34,22 @@ dependencies {
 
 compileTestJava {
     options.compilerArgs << '-parameters'
+}
+
+publishing {
+    repositories {
+        maven {
+            name = project.name
+            url = uri("https://maven.pkg.github.com/wyy0117/${project.name}")
+            credentials {
+                username = project.findProperty("username") 
+                password = project.findProperty("password") 
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
 }
