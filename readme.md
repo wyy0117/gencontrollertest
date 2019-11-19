@@ -18,16 +18,16 @@ A：对于单元测试来说，速度，性能等都是无关紧要的，最终�
     1. 在需要使用的项目中添加依赖
         ```
         <dependency>
-            <groupId>com.wyy</groupId>
+            <groupId>com.github.wyy0117</groupId>
             <artifactId>gencontrollertest</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
             <scope>test</scope>
         </dependency>
         ```    
 1. 直接使用maven中央仓库
     ```
     <dependency>
-        <groupId>com.wyy</groupId>
+        <groupId>com.github.wyy0117</groupId>
         <artifactId>gencontrollertest</artifactId>
         <version>1.0</version>
         <scope>test</scope>
