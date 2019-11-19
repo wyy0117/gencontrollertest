@@ -6,23 +6,33 @@ A: springboot项目的测试，每跑一个单元测试，基本是需要项目�
 Q：为什么使用groovy而不是java？  
 A：对于单元测试来说，速度，性能等都是无关紧要的，最终目的是为了把接口测试一遍，参数怎么方便怎么拼，代码行数怎么少就怎么写。java这种强类型语言不太适合，groovy这种半强类型就非常灵活，需要强类型就可以强类型，不需要就可以像js那样灵活，而且跟java又非常像，学习成本相对较低。  
 ### 使用方法
-1. clone项目
-    ```
-    git clone https://github.com/wyy0117/gencontrollertest.git
-    ```
-1. intall
-    ```
-    mvn install
-    ```    
-1. 在需要使用的项目中添加依赖
+1. 使用最新代码
+    1. clone项目
+        ```
+        git clone https://github.com/wyy0117/gencontrollertest.git
+        ```
+    1. intall
+        ```
+        mvn install
+        ```    
+    1. 在需要使用的项目中添加依赖
+        ```
+        <dependency>
+            <groupId>com.wyy</groupId>
+            <artifactId>gencontrollertest</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        ```    
+1. 直接使用maven中央仓库
     ```
     <dependency>
         <groupId>com.wyy</groupId>
         <artifactId>gencontrollertest</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
         <scope>test</scope>
     </dependency>
-    ```    
+    ```            
 1. 为了反射能读取到方法的参数的名字，生成代码时需要添加编译参数‘-parameters’，代码生成后该参数即可删除。
     ##### maven
     ```
