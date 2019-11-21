@@ -1,20 +1,21 @@
 package com.wyy.test.gen
 
-import org.junit.Before
-import io.restassured.http.ContentType
-import org.junit.Test
-import io.restassured.specification.RequestSpecification
-import io.restassured.response.Validatable
-import io.restassured.response.ValidatableResponse
-import io.restassured.response.Response
-import com.wyy.test.rest.dto.UserDTO
-import java.io.File
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import static io.restassured.RestAssured.*
+import com.wyy.test.rest.dto.UserDTO
+import io.restassured.http.ContentType
+import io.restassured.response.Response
+import io.restassured.response.Validatable
+import io.restassured.response.ValidatableResponse
+import io.restassured.specification.RequestSpecification
+import org.junit.Before
+import org.junit.Test
+
+import static io.restassured.RestAssured.baseURI
+import static io.restassured.RestAssured.given
 
 /**
- * @Date: 2019-11-14 10:12:37
+ * @Date: 2019-11-21 15:02:56
  * @Author: wyy
  */
 
@@ -156,5 +157,20 @@ class RestApiControllerTest {
         Validatable<ValidatableResponse, Response> response = request.post('hello5')
         response.then().statusCode(200)
         response.as(List.class)
+    }
+
+    @Test
+    void hello6Test() {
+
+        Map<String, List<UserDTO>> result = hello6()
+        println gson.toJson(result)
+    }
+
+    private Map<String, List<UserDTO>> hello6() {
+        RequestSpecification request = given()
+                .header('Authorization', jwtToken)
+        Validatable<ValidatableResponse, Response> response = request.get('hello6')
+        response.then().statusCode(200)
+        response.as(Map.class)
     }
 }

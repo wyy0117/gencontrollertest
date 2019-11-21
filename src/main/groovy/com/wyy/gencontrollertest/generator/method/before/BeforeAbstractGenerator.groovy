@@ -4,6 +4,7 @@ import com.wyy.gencontrollertest.config.AuthType
 import com.wyy.gencontrollertest.config.ConfigConstant
 import com.wyy.gencontrollertest.config.GeneratorConfig
 import com.wyy.gencontrollertest.generator.prefix.ImportQueue
+import com.wyy.gencontrollertest.reader.GenericClass
 import io.restassured.http.ContentType
 import org.junit.Before
 
@@ -20,8 +21,8 @@ abstract class BeforeAbstractGenerator implements IBeforeGenerator {
     }
 
     @Override
-    Class returnType() {
-        void.class
+    GenericClass returnType() {
+        new GenericClass(void.class)
     }
 
     @Override
@@ -33,7 +34,7 @@ abstract class BeforeAbstractGenerator implements IBeforeGenerator {
         StringBuilder builder = new StringBuilder()
         ImportQueue.instance.add(Before.class.name)
         builder.append("@Before\n")
-        builder.append("${returnType().simpleName} ${name()}(){\n")
+        builder.append("${returnType().clazz.simpleName} ${name()}(){\n")
         builder.append("baseURI = ${ConfigConstant.HOST} + ${ConfigConstant.CONTEXT}\n")
 
         if (config.authType == AuthType.JWT) {

@@ -1,11 +1,9 @@
 package com.wyy.gencontrollertest.reader
 
 import org.springframework.web.bind.annotation.*
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl
 
 import java.lang.reflect.Method
 import java.lang.reflect.Parameter
-import java.lang.reflect.Type
 
 /**
  * @Date: 19-11-3
@@ -15,6 +13,7 @@ class MethodReader {
 
     private Method method
     private def annotation
+    private GenericClass genericClass
 
     MethodReader(Method method) {
         this.method = method
@@ -23,6 +22,8 @@ class MethodReader {
                 ?: method.getAnnotation(PutMapping.class)
                 ?: method.getAnnotation(GetMapping.class)
                 ?: method.getAnnotation(DeleteMapping.class)
+
+        genericClass = new GenericClass(method.genericReturnType)
     }
 
     /**
@@ -60,28 +61,9 @@ class MethodReader {
 
     final Parameter[] parameters() {
         method.parameters
-
     }
 
-    /**
-     * 方法的返回类型
-     * @return
-     */
-    final Class<?> returnType() {
-        method.returnType
-    }
-
-    /**
-     * 泛型类型
-     * @return
-     */
-    final Class<?>[] actualTypes() {
-        Type parameterizedType = method.genericReturnType
-        if (parameterizedType != null) {
-            if (parameterizedType instanceof ParameterizedTypeImpl) {
-                return (Class<?>[]) parameterizedType.actualTypeArguments
-            }
-        }
-        return []
+    final GenericClass genericClass() {
+        genericClass
     }
 }

@@ -2,6 +2,7 @@ package com.wyy.gencontrollertest.generator.method.after
 
 import com.wyy.gencontrollertest.config.GeneratorConfig
 import com.wyy.gencontrollertest.generator.prefix.ImportQueue
+import com.wyy.gencontrollertest.reader.GenericClass
 import org.junit.After
 
 /**
@@ -16,8 +17,8 @@ abstract class AfterAbstractGenerator implements IAfterGenerator {
     }
 
     @Override
-    Class returnType() {
-        void.class
+    GenericClass returnType() {
+        new GenericClass(void.class)
     }
 
     @Override
@@ -30,7 +31,7 @@ abstract class AfterAbstractGenerator implements IAfterGenerator {
         ImportQueue.instance.add(After.class.name)
         StringBuilder builder = new StringBuilder()
         builder.append("@After\n")
-        builder.append("${returnType().simpleName} ${name()} (){\n\n")
+        builder.append("${returnType().clazz.simpleName} ${name()} (){\n\n")
         builder.append("}\n\n")
 
         builder

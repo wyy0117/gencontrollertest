@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Date: 19-11-2
@@ -42,6 +43,11 @@ public class RestApiController {
     @PostMapping("hello5")
     public List<UserDTO> hello5(@ModelAttribute UserDTO dto, MultipartFile[] files) {
         return new ArrayList<>();
+    }
+
+    @GetMapping("hello6")
+    public Map<String, List<UserDTO>> hello6() {
+        return null;
     }
 
 }

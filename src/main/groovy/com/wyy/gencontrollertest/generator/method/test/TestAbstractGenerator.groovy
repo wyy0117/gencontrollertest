@@ -4,6 +4,7 @@ import com.wyy.gencontrollertest.config.AuthType
 import com.wyy.gencontrollertest.config.ConfigConstant
 import com.wyy.gencontrollertest.config.GeneratorConfig
 import com.wyy.gencontrollertest.generator.prefix.ImportQueue
+import com.wyy.gencontrollertest.reader.GenericClass
 import com.wyy.gencontrollertest.reader.MethodReader
 import com.wyy.gencontrollertest.reader.ParameterReader
 import io.restassured.http.ContentType
@@ -48,11 +49,8 @@ abstract class TestAbstractGenerator implements ITestGenerator {
     }
 
     @Override
-    Class returnType() {
-
-        Class<?> returnType = methodReader.returnType()
-        ImportQueue.instance.add(returnType.name)
-        returnType
+    GenericClass returnType() {
+        methodReader.genericClass()
     }
 
     @Override
@@ -115,14 +113,14 @@ abstract class TestAbstractGenerator implements ITestGenerator {
                 haveFormParameter = true
                 formName = parameterReader.parameterName()
                 modelAttribute(formParameterBuilder, invokeBuilder, parametersBuilder, parameterReader)
-            } else if (parameterReader.type().name == MultipartFile[].class.name) {
+            } else if (parameterReader.genericClass().clazz.name == MultipartFile[].class.name) {
                 haveFiles = true
                 ImportQueue.instance.add(File.class.getName())
                 fileName = parameterReader.parameterName()
                 declareVariableBuilder.append("File[] ${parameterReader.parameterName()} = []\n")
                 invokeBuilder.append("${parameterReader.parameterName()},")
                 parametersBuilder.append("File[] ${parameterReader.parameterName()},")
-            } else if (parameterReader.type().name == MultipartFile.class.name) {
+            } else if (parameterReader.genericClass().clazz.name == MultipartFile.class.name) {
                 haveFile = true
                 ImportQueue.instance.add(File.class.name)
                 fileName = parameterReader.parameterName()
@@ -140,7 +138,6 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         }
 
         declareVariableBuilder = new StringBuilder(declareVariableBuilder.toString().split(",").join(","))
-        queryParameterBuilder = new StringBuilder(queryParameterBuilder.toString().split(",").join(","))
         invokeBuilder = new StringBuilder(invokeBuilder.toString().split(",").join(","))
         parametersBuilder = new StringBuilder(parametersBuilder.toString().split(",").join(","))
         pathParametersBuilder = new StringBuilder(pathParametersBuilder.toString().split(",").join(","))
@@ -151,13 +148,12 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         haveFormParameter && builder.append(formParameterBuilder)
         haveQueryParameter && builder.append(queryParameterBuilder)
 
-        if (returnType().simpleName != "void") {
-            builder.append("\n${returnType().simpleName}")
-
-            if (methodReader.actualTypes()) {
-                methodReader.actualTypes().each { ImportQueue.instance.add(it.name) }
-                builder.append("<${methodReader.actualTypes()*.simpleName.join(",")}>")
+        if (returnType().clazz.simpleName != "void") {
+            builder.append("\n${returnType().toString()}")
+            returnType().classList().each {
+                ImportQueue.instance.add(it.name)
             }
+
             builder.append(" $RESULT = ${name()}(")
             invokeBuilder.length() > 0 && builder.append("${invokeBuilder.toString()}")
 
@@ -171,10 +167,7 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         builder.append("}\n\n")
 
         //测试的真实方法
-        builder.append("private ${returnType().simpleName}")
-        if (methodReader.actualTypes()) {
-            builder.append("<${methodReader.actualTypes()*.simpleName.join(",")}>")
-        }
+        builder.append("private ${returnType().toString()}")
         builder.append(" ${name()}(")
         builder.append(parametersBuilder)
 
@@ -220,8 +213,8 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         }
         builder.append("${RESPONSE}.then().statusCode(200)\n")
 
-        if (returnType().name != void.class.name) {
-            builder.append("${RESPONSE}.as(${returnType().simpleName}.class)\n")
+        if (returnType().clazz.name != void.class.name) {
+            builder.append("${RESPONSE}.as(${returnType().clazz.simpleName}.class)\n")
         }
         builder.append("}\n")
         builder
@@ -229,9 +222,9 @@ abstract class TestAbstractGenerator implements ITestGenerator {
 
     //肯定是java.lang 中的类，不需要import
     protected void pathVariable(StringBuilder declareVariableBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, StringBuilder pathParametersBuilder, ParameterReader parameterReader) {
-        declareVariableBuilder.append("${parameterReader.type().simpleName} ${parameterReader.parameterName()} = new Object()\n")
+        declareVariableBuilder.append("${parameterReader.genericClass().clazz.simpleName} ${parameterReader.parameterName()} = new Object()\n")
         invokeBuilder.append("${parameterReader.parameterName()},")
-        parametersBuilder.append("${parameterReader.type().simpleName} ${parameterReader.parameterName()},")
+        parametersBuilder.append("${parameterReader.genericClass().clazz.simpleName} ${parameterReader.parameterName()},")
         pathParametersBuilder.append("${parameterReader.parameterName()},")
     }
 
@@ -241,7 +234,7 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         if (parameterReader.defaultValue() == null) {
             queryParameterBuilder.append("null,\n")
         } else {
-            if (parameterReader.type() == String.class) {
+            if (parameterReader.genericClass().clazz == String.class) {
                 queryParameterBuilder.append("\"${parameterReader.defaultValue()}\",\n")
             } else {
                 queryParameterBuilder.append("${parameterReader.defaultValue()},\n")
@@ -250,31 +243,26 @@ abstract class TestAbstractGenerator implements ITestGenerator {
     }
 
     protected void requestBody(StringBuilder declareVariableBuilder, StringBuilder invokeBuilder, StringBuilder parametersBuilder, ParameterReader parameterReader) {
-        ImportQueue.instance.add(parameterReader.type().name)
-        declareVariableBuilder.append("${parameterReader.type().simpleName}")
-        if (parameterReader.actualTypes()) {
-            parameterReader.actualTypes().each {
-                ImportQueue.instance.add(it.name)
-            }
-            declareVariableBuilder.append("<${parameterReader.actualTypes()*.simpleName.join(",")}>")
+        ImportQueue.instance.add(parameterReader.genericClass().clazz.name)
+        declareVariableBuilder.append("${parameterReader.genericClass().toString()}")
+
+        parameterReader.genericClass().classList().each {
+            ImportQueue.instance.add(it.name)
         }
         declareVariableBuilder.append(" ${parameterReader.parameterName()} ")
 
-        if (parameterReader.type().isInterface()) {
+        if (parameterReader.genericClass().clazz.isInterface()) {
             declareVariableBuilder.append("= null\n")
         } else {
-            declareVariableBuilder.append("= new ${parameterReader.type().simpleName}")
-            if (parameterReader.actualTypes()) {
+            declareVariableBuilder.append("= new ${parameterReader.genericClass().clazz.simpleName}")
+            if (parameterReader.genericClass().genericList) {
                 declareVariableBuilder.append("<>")
             }
             declareVariableBuilder.append("()\n")
         }
 
         invokeBuilder.append("${parameterReader.parameterName()} ,")
-        parametersBuilder.append("${parameterReader.type().simpleName}")
-        if (parameterReader.actualTypes()) {
-            parametersBuilder.append("<${parameterReader.actualTypes()*.simpleName.join(",")}>")
-        }
+        parametersBuilder.append("${parameterReader.genericClass().toString()}")
         parametersBuilder.append(" ${parameterReader.parameterName()},")
     }
 

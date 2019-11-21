@@ -1,6 +1,7 @@
 package com.wyy.gencontrollertest.generator.method
 
 import com.wyy.gencontrollertest.generator.IGenerator
+import com.wyy.gencontrollertest.reader.GenericClass
 
 
 /**
@@ -9,7 +10,7 @@ import com.wyy.gencontrollertest.generator.IGenerator
  */
 interface IMethodGenerator extends IGenerator {
 
-    Class returnType()
+    GenericClass returnType()
 
     String name()
 }
