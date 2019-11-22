@@ -22,7 +22,7 @@ abstract class ClassAbstractGenerator implements IClassGenerator {
 
     @Override
     String className() {
-        this.config.aClass.simpleName + "Test"
+        this.config.clazz.simpleName + "Test"
     }
 
     @Override

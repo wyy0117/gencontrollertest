@@ -22,7 +22,7 @@ class CodeFileWriter {
             folder.mkdirs()
         }
 
-        String fileName = (config.testClassName ?: new ClassReader(config.aClass).className() + "Test") + ".groovy"
+        String fileName = (config.testClassName ?: new ClassReader(config.clazz).className() + "Test") + ".groovy"
 
         folder.listFiles()
         int size = folder.listFiles({ file, name ->

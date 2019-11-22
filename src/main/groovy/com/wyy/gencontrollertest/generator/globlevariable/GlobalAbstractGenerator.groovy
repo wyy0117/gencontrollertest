@@ -27,7 +27,7 @@ abstract class GlobalAbstractGenerator implements IGlobalVariableGenerator {
 
     @Override
     String context() {
-        config.context + new ClassReader(config.aClass).url()
+        config.context + new ClassReader(config.clazz).url()
     }
 
     @Override

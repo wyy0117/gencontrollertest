@@ -10,22 +10,22 @@ import java.lang.reflect.Method
  */
 class ClassReader {
 
-    private Class<?> aClass = null
+    private Class<?> clazz = null
 
-    ClassReader(Class aClass) {
-        this.aClass = aClass
+    ClassReader(Class clazz) {
+        this.clazz = clazz
     }
 
     String className() {
-        aClass.simpleName
+        clazz.simpleName
     }
 
     final Method[] methods() {
-        aClass.declaredMethods
+        clazz.declaredMethods
     }
 
     final String url() {
-        RequestMapping annotation = aClass.getAnnotation(RequestMapping.class)
+        RequestMapping annotation = clazz.getAnnotation(RequestMapping.class)
         if (annotation != null) {
             String[] urls = annotation.value()
             if (urls.length > 0) {

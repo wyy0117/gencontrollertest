@@ -20,7 +20,7 @@ A：对于单元测试来说，速度，性能等都是无关紧要的，最终�
         <dependency>
             <groupId>com.github.wyy0117</groupId>
             <artifactId>gencontrollertest</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
             <scope>test</scope>
         </dependency>
         ```    
@@ -29,7 +29,7 @@ A：对于单元测试来说，速度，性能等都是无关紧要的，最终�
     <dependency>
         <groupId>com.github.wyy0117</groupId>
         <artifactId>gencontrollertest</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
         <scope>test</scope>
     </dependency>
     ```            
@@ -60,7 +60,7 @@ A：对于单元测试来说，速度，性能等都是无关紧要的，最终�
     ```
     @Test
     void gen() {
-        new CodeGenerator(new GeneratorConfig(aClass: RestApiController.class, packageName: 'com.wyy.test.gen', context: "gen",authType: AuthType.JWT)).gen()
+        new CodeGenerator(new GeneratorConfig(clazz: RestApiController.class, packageName: 'com.wyy.test.gen', context: "gen",authType: AuthType.JWT)).gen()
     }
     ```  
 1. 配置参数说明  
@@ -71,7 +71,7 @@ A：对于单元测试来说，速度，性能等都是无关紧要的，最终�
         <td>解释</td>
     </tr>
    <tr>
-      <td>aClass</td>
+      <td>clazz</td>
       <td></td>
       <td>要生产测试代码的controller类</td>
    </tr>

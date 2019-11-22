@@ -23,8 +23,8 @@ class CodeGenerator {
     private IBeforeGenerator beforeGenerator
     private IAfterGenerator afterGenerator
 
-    CodeGenerator(Class<?> aClass) {
-        config = new GeneratorConfig(aClass: aClass)
+    CodeGenerator(Class<?> clazz) {
+        config = new GeneratorConfig(clazz: clazz)
     }
 
     CodeGenerator(GeneratorConfig config) {
@@ -42,7 +42,7 @@ class CodeGenerator {
     void gen() {
         StringBuilder stringBuilder = new StringBuilder()
 
-        ClassReader classReader = new ClassReader(config.aClass)
+        ClassReader classReader = new ClassReader(config.clazz)
         List<IMethodGenerator> methodGeneratorList = []
         if (config.before) {
             if (beforeGenerator != null) {

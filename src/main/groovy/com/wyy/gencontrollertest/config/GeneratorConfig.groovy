@@ -13,7 +13,7 @@ class GeneratorConfig {
     /**
      * 要生产测试代码的controller类
      */
-    Class<?> aClass
+    Class<?> clazz
     /**
      * 作者信息
      */
@@ -39,7 +39,7 @@ class GeneratorConfig {
     String testClassName
 
     String getPackageName() {
-        packageName ?: aClass.package.name
+        packageName ?: clazz.package.name
     }
 
     String getAuthor() {
