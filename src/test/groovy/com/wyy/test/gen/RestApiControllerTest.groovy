@@ -15,7 +15,7 @@ import static io.restassured.RestAssured.baseURI
 import static io.restassured.RestAssured.given
 
 /**
- * @Date: 2019-11-21 15:02:56
+ * @Date: 2019-11-29 20:11:10
  * @Author: wyy
  */
 
@@ -172,5 +172,27 @@ class RestApiControllerTest {
         Validatable<ValidatableResponse, Response> response = request.get('hello6')
         response.then().statusCode(200)
         response.as(Map.class)
+    }
+
+    @Test
+    void hello7Test() {
+        Map queryMap = [
+                a: null,
+                b: null,
+        ]
+
+        long result = hello7(queryMap)
+        println gson.toJson(result)
+    }
+
+    private long hello7(queryMap) {
+        RequestSpecification request = given()
+                .header('Authorization', jwtToken)
+        queryMap.each {
+            request.queryParam(it.key, it.value)
+        }
+        Validatable<ValidatableResponse, Response> response = request.get('hello7')
+        response.then().statusCode(200)
+        response.as(long.class)
     }
 }

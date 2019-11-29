@@ -50,4 +50,9 @@ public class RestApiController {
         return null;
     }
 
+    @GetMapping("hello7")
+    public long hello7(@RequestParam long a, @RequestParam double b) {
+        return 1L;
+    }
+
 }

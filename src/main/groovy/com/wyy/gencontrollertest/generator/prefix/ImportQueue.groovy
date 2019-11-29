@@ -8,9 +8,8 @@ package com.wyy.gencontrollertest.generator.prefix
 class ImportQueue {
     private Set<String> queue = []
     private Set<String> ignore = [
-            "void",
-            "java.lang",
-            "java.util"
+            void.class.name, "java.lang", "java.util", byte.class.name, short.class.name, int.class.name, long.class.name, float.class.name, double.class.name, boolean.class.name, char.class.name
+
     ]
 
     void add(String className) {
