@@ -100,20 +100,7 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         parameters.each {
             ParameterReader parameterReader = new ParameterReader(it)
             def annotation = parameterReader.annotation
-            if (annotation instanceof PathVariable) {
-                pathVariable(declareVariableBuilder, invokeBuilder, parametersBuilder, pathParametersBuilder, parameterReader)
-            } else if (annotation instanceof RequestParam) {
-                haveQueryParameter = true
-                requestParameter(queryParameterBuilder, parameterReader)
-            } else if (annotation instanceof RequestBody) {
-                haveBody = true
-                bodyName = parameterReader.parameterName()
-                requestBody(declareVariableBuilder, invokeBuilder, parametersBuilder, parameterReader)
-            } else if (annotation instanceof ModelAttribute) {
-                haveFormParameter = true
-                formName = parameterReader.parameterName()
-                modelAttribute(formParameterBuilder, invokeBuilder, parametersBuilder, parameterReader)
-            } else if (parameterReader.genericClass().clazz.name == MultipartFile[].class.name) {
+            if (parameterReader.genericClass().clazz.name == MultipartFile[].class.name) {
                 haveFiles = true
                 ImportQueue.instance.add(File.class.getName())
                 fileName = parameterReader.parameterName()
@@ -127,6 +114,19 @@ abstract class TestAbstractGenerator implements ITestGenerator {
                 declareVariableBuilder.append("File ${parameterReader.parameterName()} = new File('')\n")
                 invokeBuilder.append("${parameterReader.parameterName()},")
                 parametersBuilder.append("File ${parameterReader.parameterName()},")
+            } else if (annotation instanceof PathVariable) {
+                pathVariable(declareVariableBuilder, invokeBuilder, parametersBuilder, pathParametersBuilder, parameterReader)
+            } else if (annotation instanceof RequestParam) {
+                haveQueryParameter = true
+                requestParameter(queryParameterBuilder, parameterReader)
+            } else if (annotation instanceof RequestBody) {
+                haveBody = true
+                bodyName = parameterReader.parameterName()
+                requestBody(declareVariableBuilder, invokeBuilder, parametersBuilder, parameterReader)
+            } else if (annotation instanceof ModelAttribute) {
+                haveFormParameter = true
+                formName = parameterReader.parameterName()
+                modelAttribute(formParameterBuilder, invokeBuilder, parametersBuilder, parameterReader)
             } else {
                 println "${name()} parameter ${parameterReader.parameterName()} have no annotation"
             }

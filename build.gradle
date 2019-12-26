@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'com.github.wyy0117'
-version '1.2'
+version '1.2.1'
 
 sourceCompatibility = 1.8
 
@@ -54,10 +54,10 @@ publishing {
     // 定义发布什么
     publications {
         mavenJava(MavenPublication) {
-            groupId  project.group
-            artifactId  project.name
-            version  project.version
-            from  components.java
+            groupId project.group
+            artifactId project.name
+            version project.version
+            from components.java
             //配置上传源码
             artifact sourceJar
             artifact javadocJar
