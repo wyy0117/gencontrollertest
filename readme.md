@@ -20,7 +20,7 @@ A：对于单元测试来说，速度，性能等都是无关紧要的，最终�
         <dependency>
             <groupId>com.github.wyy0117</groupId>
             <artifactId>gencontrollertest</artifactId>
-            <version>1.1</version>
+            <version>${version}</version>
             <scope>test</scope>
         </dependency>
         ```    
@@ -29,7 +29,7 @@ A：对于单元测试来说，速度，性能等都是无关紧要的，最终�
     <dependency>
         <groupId>com.github.wyy0117</groupId>
         <artifactId>gencontrollertest</artifactId>
-        <version>1.1</version>
+        <version>${version}</version>
         <scope>test</scope>
     </dependency>
     ```            
@@ -130,3 +130,4 @@ A：对于单元测试来说，速度，性能等都是无关紧要的，最终�
 1. ~~嵌套泛型类型~~v1.1  
 1. ~~java基础类型不需要import~~v1.2
 1. ~~优先处理文件~~v1.2.1
+1. ~~添加对设置charset的支持~~V1.3.0

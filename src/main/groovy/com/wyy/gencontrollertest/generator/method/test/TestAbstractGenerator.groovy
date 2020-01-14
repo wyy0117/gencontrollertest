@@ -7,6 +7,8 @@ import com.wyy.gencontrollertest.generator.prefix.ImportQueue
 import com.wyy.gencontrollertest.reader.GenericClass
 import com.wyy.gencontrollertest.reader.MethodReader
 import com.wyy.gencontrollertest.reader.ParameterReader
+import io.restassured.RestAssured
+import io.restassured.config.EncoderConfig
 import io.restassured.http.ContentType
 import io.restassured.response.Response
 import io.restassured.response.Validatable
@@ -21,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile
 
 import java.lang.reflect.Method
 import java.lang.reflect.Parameter
+import java.nio.charset.Charset
 
 /**
  * @Date: 19-11-4
@@ -174,38 +177,15 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         builder.append("){\n")
         ImportQueue.instance.add(RequestSpecification.class.name)
         builder.append("RequestSpecification ${REQUEST} = given()\n")
-        if (config.authType == AuthType.JWT) {
-            builder.append(".header('${ConfigConstant.AUTHORIZATION}', ${ConfigConstant.JWT_TOKEN})\n")
-        } else if (config.authType == AuthType.BASIC) {
-            builder.append(".auth().preemptive().basic(\"${ConfigConstant.USERNAME}\", \"${ConfigConstant.PASSWORD}\")\n")
-        }
+        appendCharset(builder)
+        appendAuth(builder)
+        appendFile(haveFile, builder, fileName, haveFiles)
 
-        if (haveFile) {
-            builder.append(".multiPart('${fileName}',${fileName})\n")
-        } else if (haveFiles) {
-            builder.append("${fileName}.each{\n")
-            builder.append("${REQUEST}.multiPart('${fileName}',it)\n")
-            builder.append('}\n')
-        }
-        if (haveBody) {
-            ImportQueue.instance.add(ContentType.class.name)
-            builder.append('.contentType(ContentType.JSON)\n')
-            builder.append(".body(${bodyName})\n")
-        }
-        if (haveQueryParameter) {
-            builder.append("${QUERY_MAP}.each{\n")
-            builder.append("${REQUEST}.queryParam(it.key,it.value)")
-            builder.append("}\n")
-        }
-        if (haveFormParameter) {
-            builder.append("${formName}.each{\n")
-            builder.append("${REQUEST}.formParam(it.key,it.value)")
-            builder.append("}\n")
-        }
+        appendBody(haveBody, builder, bodyName)
+        appendQueryParameter(haveQueryParameter, builder)
+        appendFormParameter(haveFormParameter, builder, formName)
 
-        ImportQueue.instance.add(Validatable.class.name)
-        ImportQueue.instance.add(ValidatableResponse.class.name)
-        ImportQueue.instance.add(Response.class.name)
+        ImportQueue.instance.add(Validatable.class.name, ValidatableResponse.class.name, Response.class.name)
         if (pathParametersBuilder.length() > 0) {
             builder.append("${Validatable.class.simpleName}<${ValidatableResponse.class.simpleName}, ${Response.class.simpleName}> ${RESPONSE} = ${REQUEST}.${requestMethod()}('${url()}',${pathParametersBuilder.toString()})\n")
         } else {
@@ -218,6 +198,55 @@ abstract class TestAbstractGenerator implements ITestGenerator {
         }
         builder.append("}\n")
         builder
+    }
+
+    private void appendFormParameter(boolean haveFormParameter, StringBuilder builder, String formName) {
+        if (haveFormParameter) {
+            builder.append("${formName}.each{\n")
+            builder.append("${REQUEST}.formParam(it.key,it.value)")
+            builder.append("}\n")
+        }
+    }
+
+    private void appendQueryParameter(boolean haveQueryParameter, StringBuilder builder) {
+        if (haveQueryParameter) {
+            builder.append("${QUERY_MAP}.each{\n")
+            builder.append("${REQUEST}.queryParam(it.key,it.value)")
+            builder.append("}\n")
+        }
+    }
+
+    private void appendBody(boolean haveBody, StringBuilder builder, String bodyName) {
+        if (haveBody) {
+            ImportQueue.instance.add(ContentType.class.name)
+            builder.append('.contentType(ContentType.JSON)\n')
+            builder.append(".body(${bodyName})\n")
+        }
+    }
+
+    private void appendFile(boolean haveFile, StringBuilder builder, String fileName, boolean haveFiles) {
+        if (haveFile) {
+            builder.append(".multiPart('${fileName}',${fileName})\n")
+        } else if (haveFiles) {
+            builder.append("${fileName}.each{\n")
+            builder.append("${REQUEST}.multiPart('${fileName}',it)\n")
+            builder.append('}\n')
+        }
+    }
+
+    private void appendAuth(StringBuilder builder) {
+        if (config.authType == AuthType.JWT) {
+            builder.append(".header('${ConfigConstant.AUTHORIZATION}', ${ConfigConstant.JWT_TOKEN})\n")
+        } else if (config.authType == AuthType.BASIC) {
+            builder.append(".auth().preemptive().basic(\"${ConfigConstant.USERNAME}\", \"${ConfigConstant.PASSWORD}\")\n")
+        }
+    }
+
+    private void appendCharset(StringBuilder builder) {
+        if (config.charset) {
+            ImportQueue.instance.add(RestAssured.class.name, EncoderConfig.class.name, Charset.class.name)
+            builder.append(".config(config().encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset(Charset.forName(\"${config.charset}\"))))\n")
+        }
     }
 
     //肯定是java.lang 中的类，不需要import

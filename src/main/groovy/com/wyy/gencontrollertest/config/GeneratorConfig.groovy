@@ -1,5 +1,7 @@
 package com.wyy.gencontrollertest.config
 
+import java.nio.charset.Charset
+
 /**
  * @Date: 19-11-4
  * @Author: wyy
@@ -25,11 +27,11 @@ class GeneratorConfig {
     String context = ""
     AuthType authType
     /**
-     * 是否生产before
+     * 是否生成before
      */
     boolean before = false
     /**
-     * 是否生产after
+     * 是否生成after
      */
     boolean after = false
 
@@ -37,6 +39,8 @@ class GeneratorConfig {
      * 单元测试类的名字
      */
     String testClassName
+
+    String charset = null
 
     String getPackageName() {
         packageName ?: clazz.package.name
@@ -52,5 +56,15 @@ class GeneratorConfig {
         }
         context.startsWith("/") || (context = "/" + context)
         context
+    }
+
+    GeneratorConfig setCharset(String charset) {
+        this.charset = charset
+        this
+    }
+
+    GeneratorConfig setCharset(Charset charset) {
+        this.charset = charset.toString()
+        this
     }
 }

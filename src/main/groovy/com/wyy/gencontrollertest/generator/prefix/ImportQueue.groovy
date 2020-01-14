@@ -12,8 +12,10 @@ class ImportQueue {
 
     ]
 
-    void add(String className) {
-        ignore.find({ className.startsWith(it) }) || queue.add(className)
+    void add(String... classNames) {
+        classNames.each { className ->
+            ignore.find({ className.startsWith(it) }) || queue.add(className)
+        }
     }
 
     Set<String> getQueue() {
