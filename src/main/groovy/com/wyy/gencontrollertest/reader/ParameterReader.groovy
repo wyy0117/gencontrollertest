@@ -35,8 +35,7 @@ class ParameterReader {
      * @return
      */
     final List<String> fieldNames() {
-        Class<?> clazz = parameter.type
-        Field[] fields = clazz.declaredFields
+        Field[] fields = fields()
 
         //build模式下，无法反射出set方法，坑
 //        List<String> fieldNames = fields.find({
@@ -48,6 +47,11 @@ class ParameterReader {
         fields*.name
     }
 
+    final Field[] fields() {
+        Class<?> clazz = parameter.type
+        clazz.declaredFields
+    }
+
     /**
      * 只有RequestParam才有defaultValue
      * @return
@@ -55,7 +59,7 @@ class ParameterReader {
     final String defaultValue() {
         RequestParam annotation = parameter.getAnnotation(RequestParam.class)
         if (annotation == null || annotation.defaultValue() == ValueConstants.DEFAULT_NONE) {
-            return null
+            return 'null'
         }
         annotation.defaultValue()
     }

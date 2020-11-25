@@ -15,43 +15,72 @@ import java.util.Map;
 @RestController
 public class RestApiController {
 
-    @GetMapping("hello")
-    public String hello(@RequestParam(defaultValue = "abc") String a, @RequestParam String b, @RequestParam(defaultValue = "1") int c) {
+    @GetMapping("return-string")
+    public String returnString(@RequestParam(defaultValue = "abc") String a, @RequestParam String b, @RequestParam(defaultValue = "1") int c) {
         return "hello";
     }
 
-    @DeleteMapping(value = "hello1/{id}")
-    public String hello1(@PathVariable("id") long id) {
+    @DeleteMapping(value = "path-parameter/{id}")
+    public String pathParameter(@PathVariable("id") long id) {
         return "11";
     }
 
-    @PostMapping(value = "hello2")
-    public void hello2(@RequestBody UserDTO dto) {
+    @PostMapping(value = "test-post")
+    public void testPost(@RequestBody UserDTO dto) {
 
     }
 
-    @PostMapping("hello3")
-    public void hello3(@ModelAttribute UserDTO dto, MultipartFile file) {
+    @PostMapping(value = "list-body")
+    public void listBody(@RequestBody List<UserDTO> dto) {
+
+    }
+    @PostMapping(value = "array-body")
+    public void arrayBody(@RequestBody UserDTO[] dto) {
 
     }
 
-    @PostMapping(value = "hello4")
-    public void hello4(@RequestBody List<UserDTO> dto) {
+    @PostMapping("attribute")
+    public void attribute(@ModelAttribute UserDTO dto) {
 
     }
 
-    @PostMapping("hello5")
-    public List<UserDTO> hello5(@ModelAttribute UserDTO dto, MultipartFile[] files) {
+    @PostMapping("file")
+    public void file(MultipartFile file) {
+
+    }
+
+    @PostMapping("attribute-file")
+    public void attributeFile(@ModelAttribute UserDTO dto, MultipartFile file) {
+
+    }
+
+    @PostMapping(value = "generic-class")
+    public void genericClass(@RequestBody List<UserDTO> dto) {
+
+    }
+
+    @PostMapping("files")
+    public List<UserDTO> files(MultipartFile[] files) {
         return new ArrayList<>();
     }
 
-    @GetMapping("hello6")
-    public Map<String, List<UserDTO>> hello6() {
+    @GetMapping("return-generic")
+    public Map<String, List<UserDTO>> returnGeneric() {
         return null;
     }
 
-    @GetMapping("hello7")
-    public long hello7(@RequestParam long a, @RequestParam double b) {
+    @GetMapping("request-param")
+    public long requestParam(@RequestParam long a, @RequestParam double b) {
+        return 1L;
+    }
+
+    @GetMapping("default-value")
+    public long defaultValue(@RequestParam(defaultValue = "233") long a, @RequestParam double b) {
+        return 1L;
+    }
+
+    @GetMapping("alias")
+    public long alias(@RequestParam(name = "id") long a, @RequestParam double b) {
         return 1L;
     }
 

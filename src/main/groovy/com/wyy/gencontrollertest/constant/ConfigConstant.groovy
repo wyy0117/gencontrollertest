@@ -1,4 +1,4 @@
-package com.wyy.gencontrollertest.config
+package com.wyy.gencontrollertest.constant
 
 /**
  * @Date: 19-11-4

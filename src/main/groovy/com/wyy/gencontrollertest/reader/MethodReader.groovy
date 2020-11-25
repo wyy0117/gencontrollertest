@@ -63,7 +63,7 @@ class MethodReader {
         method.parameters
     }
 
-    final GenericClass genericClass() {
+    final GenericClass returnType() {
         genericClass
     }
 }

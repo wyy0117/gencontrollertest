@@ -1,6 +1,9 @@
 package com.wyy.gencontrollertest.config
 
+import com.wyy.gencontrollertest.constant.AuthType
+
 import java.nio.charset.Charset
+import java.text.SimpleDateFormat
 
 /**
  * @Date: 19-11-4
@@ -26,10 +29,7 @@ class GeneratorConfig {
      */
     String context = ""
     AuthType authType
-    /**
-     * 是否生成before
-     */
-    boolean before = false
+
     /**
      * 是否生成after
      */
@@ -38,9 +38,9 @@ class GeneratorConfig {
     /**
      * 单元测试类的名字
      */
-    String testClassName
+    String testClassname
 
-    String charset = null
+    String charset = "UTF-8"
 
     String getPackageName() {
         packageName ?: clazz.package.name
