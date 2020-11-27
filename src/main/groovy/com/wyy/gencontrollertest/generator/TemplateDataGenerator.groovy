@@ -37,7 +37,7 @@ class TemplateDataGenerator {
                 author       : config.getAuthor(),
                 host         : config.host,
                 context      : config.context,
-                authType     : config.authType.name(),
+                authType     : config.authType?.name(),
                 after        : config.after,
                 charset      : config.charset,
                 testClassname: config.testClassname,

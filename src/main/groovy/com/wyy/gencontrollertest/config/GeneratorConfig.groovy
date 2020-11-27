@@ -28,7 +28,9 @@ class GeneratorConfig {
      * rest接口的application context
      */
     String context = ""
-    AuthType authType
+    AuthType authType = AuthType.NONE
+
+    String outputPath
 
     /**
      * 是否生成after

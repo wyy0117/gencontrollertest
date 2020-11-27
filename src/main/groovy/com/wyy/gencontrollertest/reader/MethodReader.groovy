@@ -2,6 +2,8 @@ package com.wyy.gencontrollertest.reader
 
 import org.springframework.web.bind.annotation.*
 
+import java.lang.annotation.AnnotationFormatError
+import java.lang.annotation.AnnotationTypeMismatchException
 import java.lang.reflect.Method
 import java.lang.reflect.Parameter
 
@@ -54,7 +56,12 @@ class MethodReader {
      */
     final String requestMethod() {
         if (annotation instanceof RequestMapping) {
-            return ((RequestMapping) annotation).method()[0].toString().toLowerCase()
+            //如果方法上反射出的注解无请求方式的生命则反射出类上面的RequestMapping注解
+            RequestMethod[] requestMethods = ((RequestMapping) annotation).method() ?: this.method.getDeclaringClass().getAnnotation(RequestMapping.class).method()
+            if (requestMethods.size() == 0) {
+                throw new AnnotationFormatError("${this.method} have no request method found")
+            }
+            return requestMethods[0].toString().toLowerCase()
         }
         ((annotation).annotationType().simpleName - 'Mapping').toString().toLowerCase()
     }

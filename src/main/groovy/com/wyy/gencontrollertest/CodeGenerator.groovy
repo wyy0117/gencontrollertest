@@ -59,7 +59,7 @@ class CodeGenerator {
         // step4 加载模版文件
         Template template = configuration.getTemplate(templateFileName);
         // step5 生成数据
-        String path = System.getProperty("user.dir") + "/src/test/groovy"
+        String path = config.outputPath ?: System.getProperty("user.dir") + "/src/test/groovy"
 
         File folder = new File(path, config.packageName.replace(".", "/"))
         if (!folder.exists()) {
