@@ -21,7 +21,6 @@ class ${testClassname} {
     private String ${username} = 'username'//todo
     private String ${password} = 'password'//todo
     </#if>
-
 <#if authType == "JWT">
     private String jwt
 
@@ -120,8 +119,8 @@ class ${testClassname} {
         }
     </#if>
     <#if (method.bodyParameterList?size>0)>
-            .contentType(ContentType.JSON)
-            .body(body)
+                .contentType(ContentType.JSON)
+                .body(body)
     </#if>
         <#if (method.queryParameterList?size>0)>
         queryParameters.each {
