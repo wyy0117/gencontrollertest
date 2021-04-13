@@ -1,11 +1,7 @@
 package com.wyy.gencontrollertest.generator
 
 import com.wyy.gencontrollertest.config.GeneratorConfig
-import com.wyy.gencontrollertest.reader.AMethod
-import com.wyy.gencontrollertest.reader.AParameter
-import com.wyy.gencontrollertest.reader.ClassReader
-import com.wyy.gencontrollertest.reader.MethodReader
-import com.wyy.gencontrollertest.reader.ParameterReader
+import com.wyy.gencontrollertest.reader.*
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
@@ -27,11 +23,13 @@ class MethodGenerator {
         this.config = config
     }
 
-    def gen(){
+    def gen() {
         ClassReader classReader = new ClassReader(config.clazz)
         List<AMethod> methods = classReader.methods().collect {
             MethodReader methodReader = new MethodReader(it)
-
+            if (!methodReader.validMethod()) {
+                return
+            }
             AMethod method = new AMethod(name: methodReader.methodName(), uri: methodReader.url(), requestMethod: methodReader.requestMethod(), returnType: methodReader.returnType(), responseType: methodReader.returnType().clazz.simpleName)
 
             if (methodReader.returnType().clazz.simpleName != "void") {
@@ -78,7 +76,7 @@ class MethodGenerator {
                 }
             }
             method
-        }
+        }.findAll({ it != null })
 
         methods
     }

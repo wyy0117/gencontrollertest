@@ -1,6 +1,8 @@
 package com.wyy.test.rest.controller;
 
 import com.wyy.test.rest.dto.UserDTO;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +16,11 @@ import java.util.Map;
  */
 @RestController
 public class RestApiController {
+
+    public static <R> ResponseEntity<List<R>> toResponseEntity(List<R> voteServiceResponse) {
+
+        return new ResponseEntity<>(voteServiceResponse, HttpStatus.OK);
+    }
 
     @GetMapping("return-string")
     public String returnString(@RequestParam(defaultValue = "abc") String a, @RequestParam String b, @RequestParam(defaultValue = "1") int c) {

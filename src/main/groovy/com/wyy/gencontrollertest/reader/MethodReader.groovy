@@ -3,7 +3,6 @@ package com.wyy.gencontrollertest.reader
 import org.springframework.web.bind.annotation.*
 
 import java.lang.annotation.AnnotationFormatError
-import java.lang.annotation.AnnotationTypeMismatchException
 import java.lang.reflect.Method
 import java.lang.reflect.Parameter
 

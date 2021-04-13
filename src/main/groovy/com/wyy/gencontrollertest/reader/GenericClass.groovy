@@ -3,6 +3,7 @@ package com.wyy.gencontrollertest.reader
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl
 
 import java.lang.reflect.Type
+import java.lang.reflect.TypeVariable
 
 /**
  * @Date: 19-11-21
@@ -30,7 +31,13 @@ class GenericClass {
     GenericClass(ParameterizedTypeImpl parameterizedType) {
         this.clazz = parameterizedType.rawType
         Type[] actualTypeArguments = parameterizedType.actualTypeArguments
-        genericList = actualTypeArguments.collect({ new GenericClass(it) })
+        genericList = actualTypeArguments.collect({
+            if (it instanceof Class || it instanceof ParameterizedTypeImpl) {
+                new GenericClass(it)
+            } else {
+                return
+            }
+        })
     }
 
     @Override
