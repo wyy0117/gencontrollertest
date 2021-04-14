@@ -13,7 +13,7 @@ import static io.restassured.RestAssured.*
 class ${testClassname} {
 
     private String host = '${host}'
-    private String context = '/${context}'
+    private String context = '${context}'
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create()
 
@@ -127,7 +127,12 @@ class ${testClassname} {
             request.queryParam(it.key, it.value)
         }
         </#if>
-        Validatable<ValidatableResponse, Response> response = request.${method.requestMethod}('${method.uri}'<#if (method.pathParameterList?size>0)>, pathParameters</#if>)
+        <#if (method.pathParameterList?size>0)>
+        pathParameters.each {
+            request.pathParam(it.key, it.value)
+        }
+        </#if>
+        Validatable<ValidatableResponse, Response> response = request.${method.requestMethod}('${method.uri}')
         response.then().statusCode(200)
     <#if method.returnType != "void">
         response.as(${method.responseType}.class)

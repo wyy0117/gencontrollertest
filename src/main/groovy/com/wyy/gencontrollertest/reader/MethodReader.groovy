@@ -15,6 +15,8 @@ class MethodReader {
     private Method method
     private def annotation
     private GenericClass genericClass
+    private String classMappingPath = ""
+    private Class methodClass
 
     MethodReader(Method method) {
         this.method = method
@@ -25,6 +27,22 @@ class MethodReader {
                 ?: method.getAnnotation(DeleteMapping.class)
 
         genericClass = new GenericClass(method.genericReturnType)
+
+        methodClass = method.declaringClass
+        def classAnnotation = methodClass.getAnnotation(RequestMapping.class)
+                ?: methodClass.getAnnotation(PostMapping.class)
+                ?: methodClass.getAnnotation(PutMapping.class)
+                ?: methodClass.getAnnotation(GetMapping.class)
+                ?: methodClass.getAnnotation(DeleteMapping.class)
+
+        def values = classAnnotation?.value()
+        String path
+        if (values != null && values.size() > 0 && (path = values[0]).size() > 0) {
+            classMappingPath = path
+            if (!classMappingPath.startsWith("/")) {
+                classMappingPath = "/" + classMappingPath
+            }
+        }
     }
 
     /**
@@ -36,9 +54,12 @@ class MethodReader {
     }
 
     final String url() {
-        String url = annotation.value()[0] - '/'
-        url.contains("{") && (url = url.substring(0, url.indexOf("{")))
-        url
+
+        String url = annotation.value()[0]
+        if (!url.startsWith("/")) {
+            url = "/" + url
+        }
+        classMappingPath + url
     }
 
     /**

@@ -3,7 +3,6 @@ package com.wyy.gencontrollertest.config
 import com.wyy.gencontrollertest.constant.AuthType
 
 import java.nio.charset.Charset
-import java.text.SimpleDateFormat
 
 /**
  * @Date: 19-11-4
