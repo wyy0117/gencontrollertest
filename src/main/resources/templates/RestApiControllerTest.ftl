@@ -90,7 +90,7 @@ class ${testClassname} {
         ]
         </#if>
         <#if (method.fileParameter)?? >
-            File ${method.fileParameter.name} = new File('')
+        File ${method.fileParameter.name} = new File('')
         </#if>
         <#assign flag=false/>
         ${method.returnType} result = ${method.name}(<#if (method.bodyParameterList?size>0)>body<#assign flag=true></#if><#if (method.attributeParameterList?size>0)><#if flag>, </#if><#assign flag=true>attribute</#if><#if (method.pathParameterList?size>0)><#if flag>, </#if><#assign flag=true>pathParameters</#if><#if (method.queryParameterList?size>0)><#if flag>, </#if><#assign flag=true>queryParameters</#if><#if (method.fileParameter??)><#if flag>, </#if><#assign flag=true>${method.fileParameter.name}</#if>)
@@ -98,7 +98,7 @@ class ${testClassname} {
     }
 
     <#assign flag=false/>
-    private ${method.returnType} ${method.name}(<#if (method.bodyParameterList?size>0)><#assign flag=true>Map body</#if><#if (method.attributeParameterList?size>0)><#if flag>, </#if><#assign flag=true>Map attribute</#if><#if (method.pathParameterList?size>0)><#if flag>, </#if><#assign flag=true>Map pathParameters</#if><#if (method.queryParameterList?size>0)><#if flag>, </#if><#assign flag=true>Map queryParameters</#if><#if (method.fileParameter??)><#if flag>,</#if><#assign flag=true>File ${method.fileParameter.name}</#if>) {
+    private ${method.returnType} ${method.name}(<#if (method.bodyParameterList?size>0)><#assign flag=true>${method.bodyType} body</#if><#if (method.attributeParameterList?size>0)><#if flag>, </#if><#assign flag=true>Map attribute</#if><#if (method.pathParameterList?size>0)><#if flag>, </#if><#assign flag=true>Map pathParameters</#if><#if (method.queryParameterList?size>0)><#if flag>, </#if><#assign flag=true>Map queryParameters</#if><#if (method.fileParameter??)><#if flag>, </#if><#assign flag=true>File ${method.fileParameter.name}</#if>) {
         RequestSpecification request = given()
                 .config(config().encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset(Charset.forName("${charset}"))))
     <#if authType == "JWT">
@@ -111,7 +111,7 @@ class ${testClassname} {
         request.cookie("JSSIONID", session)
     </#if>
      <#if (method.fileParameter)?? >
-         .multiPart('file', file)
+                .multiPart('file', file)
      </#if>
     <#if (method.attributeParameterList?size>0)>
         attribute.each {

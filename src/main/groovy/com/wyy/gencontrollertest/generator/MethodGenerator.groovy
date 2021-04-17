@@ -59,13 +59,13 @@ class MethodGenerator {
                             ImportQueue.instance.add(it.class.name)
                         }
                     }
+                } else if (parameterReader.genericClass().clazz == MultipartFile.class) {
+                    ImportQueue.instance.add(File.class.getName())
+                    method.fileParameter = new AParameter(name: parameterReader.parameterName())
                 } else if (parameterReader.annotation?.annotationType() == PathVariable.class) {
                     method.pathParameterList.add(new AParameter(name: parameterReader.parameterName(), type: parameterReader.genericClass().clazz.getSimpleName()))
                 } else if (parameterReader.annotation?.annotationType() == RequestParam.class) {
                     method.queryParameterList.add(new AParameter(name: parameterReader.annotation.value() ?: parameterReader.parameterName(), type: parameterReader.genericClass().clazz.getSimpleName(), defaultValue: parameterReader.defaultValue()))
-                } else if (parameterReader.genericClass().clazz == MultipartFile.class) {
-                    ImportQueue.instance.add(File.class.getName())
-                    method.fileParameter = new AParameter(name: parameterReader.parameterName())
                 } else if (parameterReader.annotation?.annotationType() == ModelAttribute.class) {
                     //ModelAttribute的所有属性
                     Field[] fields = parameterReader.fields()
