@@ -93,8 +93,12 @@ class ${testClassname} {
         File ${method.fileParameter.name} = new File('')
         </#if>
         <#assign flag=false/>
+        <#if method.returnType != "void">
         ${method.returnType} result = ${method.name}(<#if (method.bodyParameterList?size>0)>body<#assign flag=true></#if><#if (method.attributeParameterList?size>0)><#if flag>, </#if><#assign flag=true>attribute</#if><#if (method.pathParameterList?size>0)><#if flag>, </#if><#assign flag=true>pathParameters</#if><#if (method.queryParameterList?size>0)><#if flag>, </#if><#assign flag=true>queryParameters</#if><#if (method.fileParameter??)><#if flag>, </#if><#assign flag=true>${method.fileParameter.name}</#if>)
         println gson.toJson(result)
+        <#else>
+        ${method.name}(<#if (method.bodyParameterList?size>0)>body<#assign flag=true></#if><#if (method.attributeParameterList?size>0)><#if flag>, </#if><#assign flag=true>attribute</#if><#if (method.pathParameterList?size>0)><#if flag>, </#if><#assign flag=true>pathParameters</#if><#if (method.queryParameterList?size>0)><#if flag>, </#if><#assign flag=true>queryParameters</#if><#if (method.fileParameter??)><#if flag>, </#if><#assign flag=true>${method.fileParameter.name}</#if>)
+        </#if>
     }
 
     <#assign flag=false/>
